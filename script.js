@@ -17,6 +17,7 @@ const horrorMovies = []
 const romanceMovies = []
 const scifiMovies = []
 const thrillerMovies = []
+
 // link to data file
 const url = "available_movies.json";
 const movieList = document.querySelector(".movieList");
@@ -32,11 +33,6 @@ const removeArticles = (str) => {
   return str;
 }
 
-async function getData() {
-  const response = await fetch(url);
-  const data = await response.json()
-  return data;
-}
 //show all movies
 const btnAll = document.getElementById("allMovies");
 btnAll.addEventListener('click', getAction);
@@ -111,6 +107,12 @@ let strThr = '';
 // users movie list
 let strUsr = '';
 
+// async function for movies
+async function getData() {
+  const response = await fetch(url);
+  const data = await response.json()
+  return data;
+}
 
 // action
 function getAction(){
@@ -333,6 +335,32 @@ function getUserMovies(){
 
 
 //3. User is shown their credit balance and returned to the selection menu. Initial is 100 credits
+
+// user credit balance 
+let userCreditBalance = 100;
+const btnShowCreditBal = document.getElementById('userCreditBalance');
+const creditBalance = document.querySelector('.creditBalance')
+btnShowCreditBal.addEventListener('click', showBalance);
+btnShowCreditBal.addEventListener('click', clearPage)
+
+function clearPage(){
+  movieList.style.display = 'none';
+  userList.style.display = 'none';
+  btnAll.style.display = 'block';
+  btnUser.style.direction = 'block';
+}
+
+let movieCost = () =>{
+  getData()
+  .then(data=>{
+    return data;
+  })
+}
+console.log(movieCost());
+
+function showBalance(){
+  creditBalance.innerHTML = `Your Current Credit Balance: ${userCreditBalance}`; 
+}
 
 
 //4. 
