@@ -75,7 +75,7 @@ function toggleButton(){
     strHor = '';
     strRom = '';
     strSci = '';
-    strThr = ''
+    strThr = '';
   }
 }
 
@@ -86,9 +86,11 @@ btnUser.addEventListener('click', toggleButtonUser);
 btnUser.addEventListener('click', clearMovieList);
 btnUser.addEventListener('click', populateUserMovies);
 
+// shhows users movies
 function populateUserMovies(){
   userList.style.display = "block";
 }
+// clears all movie list
 function clearMovieList(){
   movieList.style.display = "none";
 }
@@ -102,7 +104,7 @@ function toggleButtonUser() {
     strUsr = '';
   }
 }
-// puts movies in here as a list
+// puts movies in here as a list on the page
 let strAct = '';
 let strCom = '';
 let strDoc = '';
@@ -379,13 +381,6 @@ function showBalance(){
 btnPurchase = document.getElementById("purchaseMovie")
 // btnPurchase.addEventListener('click', purchaseMovie);
 
-// function purchaseMovie(){
-//   getData()
-//   .then(data => {
-//     // console.log(data);
-//     return data;
-//   })
-// }
 const movieTitles = []
 const form = document.getElementById('form');
 
@@ -401,7 +396,8 @@ form.addEventListener('submit',function(e){
         let moviesOne = movies[key]
         console.log(moviesOne)
         for(let i = 0; i< moviesOne.length; i++){
-          console.log(moviesOne[i].title)
+          // console.log(moviesOne[i].title)
+          // matches input of the user to title of the movie
             if (movieInput.toUpperCase() === moviesOne[i].title.toUpperCase()) {
               console.log("found movie!")
               return;
