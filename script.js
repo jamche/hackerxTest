@@ -33,6 +33,13 @@ const removeArticles = (str) => {
   return str;
 }
 
+// comparison function
+function compareStr(a,b){
+  return typeof a ==='string' && typeof b === 'string' ?
+  a.localeCompare(b, undefined, {sensitivity:'accent'}) === 0
+  : a === b;
+}
+
 //show all movies
 const btnAll = document.getElementById("allMovies");
 btnAll.addEventListener('click', getAction);
@@ -347,16 +354,10 @@ function clearPage(){
   movieList.style.display = 'none';
   userList.style.display = 'none';
   btnAll.style.display = 'block';
-  btnUser.style.direction = 'block';
+  btnUser.style.display = 'block';
 }
 
-let movieCost = () =>{
-  getData()
-  .then(data=>{
-    return data;
-  })
-}
-console.log(movieCost());
+
 
 function showBalance(){
   creditBalance.innerHTML = `Your Current Credit Balance: ${userCreditBalance}`; 
@@ -369,3 +370,80 @@ function showBalance(){
 // Each purchase deducts from the user's credit based on cost of the movie
 // If not enough credits display the string "Not enough credit remaining to purchase this movie"
 // when movie is purchased, it is added to my_movies.json 
+
+// purchase movie button has to do :
+// 1. When typed in, adds the movie to my_movies.json
+// 2. If movie is owned already, display "You have already purchased this movie" and returned to selection
+// 3. Each purchase deducts from the credit balance, if not enough credit remaining to purchase display "Not enough credit remaining to purchase this"
+
+btnPurchase = document.getElementById("purchaseMovie")
+// btnPurchase.addEventListener('click', purchaseMovie);
+
+// function purchaseMovie(){
+//   getData()
+//   .then(data => {
+//     // console.log(data);
+//     return data;
+//   })
+// }
+const movieTitles = []
+const form = document.getElementById('form');
+form.addEventListener('submit',function(e){
+  e.preventDefault();
+  const movieInput = document.getElementById('movieInput').value;
+
+  // const object = {
+  //   title:movieInput
+  // };
+  // calls data here
+  getData().then( movies =>{
+      // let caseMovies = movies.compareStr();
+      // console.log(movies);
+      for(let key in movies){
+        let moviesOne = movies[key]
+        console.log(moviesOne)
+        for(let i = 0; i< moviesOne.length; i++){
+          console.log(moviesOne[i].title)
+            if (movieInput.toUpperCase() === moviesOne[i].title.toUpperCase()) {
+              console.log("found movie!")
+              return;
+            }
+          }   
+      }
+      // console.log(name)
+      
+    console.log("not found...")
+    console.log(movieInput);
+
+  })
+  .catch(err => console.log(err))
+})
+
+
+// maybe use this for search function *********
+
+// got movie names but not the correct way
+// const movieTitles = [];
+// // get all movies titles and pushes in to array movieTitles
+// function getMovieTitles(){
+//   getData()
+//   .then(data=>{
+//     movieTitles.push(data)
+//     // console.log(movieTitlesList);
+
+//     for(let key in movieTitles){
+//       let obj = movieTitles[key]
+//       // console.log(obj);
+//       for(let key in obj){
+//         let movies = obj[key]
+//         // console.log(movies);
+//         for(let i = 0; i < movies.length; i++){
+//           // console.log(movies[i].title);
+//           movieTitles.push(movies[i].title);
+//         }
+//       }
+//     }
+//     console.log(movieTitles);
+//     return movieTitles;
+//   })
+// }
