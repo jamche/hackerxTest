@@ -388,17 +388,15 @@ btnPurchase = document.getElementById("purchaseMovie")
 // }
 const movieTitles = []
 const form = document.getElementById('form');
+
+// compares movies to the input of the user and matches
 form.addEventListener('submit',function(e){
   e.preventDefault();
   const movieInput = document.getElementById('movieInput').value;
 
-  // const object = {
-  //   title:movieInput
-  // };
+
   // calls data here
   getData().then( movies =>{
-      // let caseMovies = movies.compareStr();
-      // console.log(movies);
       for(let key in movies){
         let moviesOne = movies[key]
         console.log(moviesOne)
