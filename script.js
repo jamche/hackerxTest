@@ -404,7 +404,7 @@ const form = document.getElementById('form');
 // compares movies to the input of the user and matches
 // adds all movies that the user has typed in
 let purchasedMovies = [];
-let filteredArr = [];
+// let filteredMovies = [];
 
 // function removeDups(purchasedMovies) {
 //   let unique = {};
@@ -436,15 +436,16 @@ form.addEventListener('submit',function(e){
               // pushes the input of the user to the purchased movies array if typed in correctly
               console.log(purchasedMovies.push(moviesOne[i]))
               // creates a new array that will filter out any duplicate entries from te input
-              let filteredArr = purchasedMovies.reduce((acc, cur) => {
-                let x = acc.find(item => item.title === cur.title);
-                if (!x) {
+                filteredArr = purchasedMovies.reduce((acc, cur) => {
+                let movieName = acc.find(movie => movie.title === cur.title);
+                // if the titles do not match, add the movie to the filtered arr
+                if (!movieName) {
                   // console.log(cur);
-                  console.log(x);
+                  console.log(movieName);
                   return acc.concat([cur]);
-
+                  // if they do match, do not add the movie and alert that the movie is already owned
                 } else {
-                  console.log(x);
+                  console.log(movieName);
                   alert('You own this movie');
                   // console.log(acc);
                   return acc;
@@ -462,9 +463,9 @@ form.addEventListener('submit',function(e){
     console.log("not found...")
   })
   .catch(err => console.log(err))
-  console.log(purchasedMovies);
-  console.log(filteredArr);
   form.reset();
+  console.log(purchasedMovies);
+    // console.log(filteredMovies);
 })
 
 // on submit of input, input value is matched to all movies
