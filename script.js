@@ -85,6 +85,8 @@ btnUser.addEventListener('click', getUserMovies);
 btnUser.addEventListener('click', toggleButtonUser);
 btnUser.addEventListener('click', clearMovieList);
 btnUser.addEventListener('click', populateUserMovies);
+// btnUser.addEventListener('click', showMoviesAdded);
+
 
 // shhows users movies
 function populateUserMovies(){
@@ -138,8 +140,8 @@ function getAction(){
       strAct += `
       <ul class=${'movies'}>
         <li> Title: ${movie.title}</li> 
-        <li> Cost: ${movie.cost}</li> 
         <li> Rating: ${movie.rating}</li>
+        <li> Cost: ${movie.cost}</li> 
       </ul>  
       `
     });
@@ -326,8 +328,21 @@ function getUserMovies(){
   getMyMovies()
     .then(data => {
       userMovies.push(data);
+      // action movies
+      // sortedAction = userMovies[0].action;
+      // console.log(sortedAction);
+      // sortedAction.forEach(movie => {
+      //   strUsr += `
+      // <ul class=${'movies'}>
+      //   <li> Title: ${movie.title}</li> 
+      //   <li> Cost: ${movie.cost}</li> 
+      //   <li> Rating: ${movie.rating}</li>
+      //   <li> Watched: ${movie.watched}</li>
+      // </ul>  
+      // `
+      // });
       sorted = userMovies[0].scifi;
-      console.log(sorted);
+      // console.log(sorted);
       sorted.forEach(movie => {
       strUsr += `
       <ul class=${'movies'}>
@@ -352,6 +367,7 @@ const creditBalance = document.querySelector('.creditBalance')
 btnShowCreditBal.addEventListener('click', showBalance);
 btnShowCreditBal.addEventListener('click', clearPage)
 
+
 function clearPage(){
   movieList.style.display = 'none';
   userList.style.display = 'none';
@@ -362,7 +378,8 @@ function clearPage(){
 
 
 function showBalance(){
-  creditBalance.innerHTML = `Your Current Credit Balance: ${userCreditBalance}`; 
+  creditBalance.innerHTML = `Your Current Credit Balance: 
+    ${userCreditBalance}`; 
 }
 
 
@@ -374,7 +391,7 @@ function showBalance(){
 // when movie is purchased, it is added to my_movies.json 
 
 // purchase movie button has to do :
-// 1. When typed in, adds the movie to my_movies.json
+// 1. When typed in, adds the movie to my_movies.json ---> add to array
 // 2. If movie is owned already, display "You have already purchased this movie" and returned to selection
 // 3. Each purchase deducts from the credit balance, if not enough credit remaining to purchase display "Not enough credit remaining to purchase this"
 
@@ -385,33 +402,74 @@ const movieTitles = []
 const form = document.getElementById('form');
 
 // compares movies to the input of the user and matches
+// adds all movies that the user has typed in
+let purchasedMovies = [];
+let filteredArr = [];
+
+// function removeDups(purchasedMovies) {
+//   let unique = {};
+//   purchasedMovies.forEach(function (i) {
+//     if (!unique[i]) {
+//       unique[i] = true;
+//       console.log(unique[i])
+//     }
+//   });
+//   return Object.keys(unique);
+// }
+
 form.addEventListener('submit',function(e){
   e.preventDefault();
-  const movieInput = document.getElementById('movieInput').value;
-
-
+  // for matching to movie titles
+  const movieInput = document.getElementById('movieInput').value.toUpperCase();
   // calls data here
   getData().then( movies =>{
+    // console.log(movies);
       for(let key in movies){
+        // console.log([key]);
         let moviesOne = movies[key]
         console.log(moviesOne)
         for(let i = 0; i< moviesOne.length; i++){
           // console.log(moviesOne[i].title)
           // matches input of the user to title of the movie
-            if (movieInput.toUpperCase() === moviesOne[i].title.toUpperCase()) {
+            if (movieInput === moviesOne[i].title.toUpperCase() ) {
               console.log("found movie!")
+              // pushes the input of the user to the purchased movies array if typed in correctly
+              console.log(purchasedMovies.push(moviesOne[i]))
+              // creates a new array that will filter out any duplicate entries from te input
+              let filteredArr = purchasedMovies.reduce((acc, cur) => {
+                let x = acc.find(item => item.title === cur.title);
+                if (!x) {
+                  // console.log(cur);
+                  console.log(x);
+                  return acc.concat([cur]);
+
+                } else {
+                  console.log(x);
+                  alert('You own this movie');
+                  // console.log(acc);
+                  return acc;
+                }
+                
+              }, [])
+              console.log(filteredArr);
               return;
             }
-          }   
+          }
       }
-      // console.log(name)
-      
-    console.log("not found...")
-    console.log(movieInput);
 
+      // return;
+    // removeDups(purchasedMovies);
+    console.log("not found...")
   })
   .catch(err => console.log(err))
+  console.log(purchasedMovies);
+  console.log(filteredArr);
+  form.reset();
 })
+
+// on submit of input, input value is matched to all movies
+// if matched 
+
 
 
 // maybe use this for search function *********
