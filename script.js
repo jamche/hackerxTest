@@ -346,12 +346,13 @@ function showBalance(){
   }, 0)
    console.log(total);
    if(total > 10){
-     console.log("not enough credit")
+     console.log("No credit")
    }else{
   creditBalance.innerHTML = `Your Current Credit Balance: 
     ${userCreditBalance - total}`;
    } 
 }
+let total = 0;
 //4. 
 // User can purchase a movie by typing the name of the movie. If movie is owned alredy, the string "You have already purchased this movie" should display and user is returned to select.
 
@@ -361,9 +362,7 @@ function showBalance(){
 
 // purchase/submit purchase
 // 1. When typed in, adds the movie to my_movies.json ---> add to array
-
-// 2. If movie is owned already, display "You have already purchased this movie" and returned to selection -- need to do this
-
+// 2. If movie is owned already, display "You have already purchased this movie" and returned to selection --done
 // 3. Each purchase deducts from the credit balance, if not enough credit remaining to purchase display "Not enough credit remaining to purchase this"--- can deduct but need condition of no credit left and do not add
 
 btnPurchase = document.getElementById("purchaseMovie")
