@@ -339,20 +339,20 @@ function clearPage(){
 }
 // shows users credit balance
 function showBalance(){
-  console.log(filteredMovies);
-  // showCost();
-  let total = filteredMovies.reduce((acc, cur) => {
-    return acc + cur.cost;
-  }, 0)
-   console.log(total);
-   if(total > 10){
-     console.log("No credit")
-   }else{
+  // console.log(filteredMovies);
+  // // showCost();
+  // let total = filteredMovies.reduce((acc, cur) => {
+  //   return acc + cur.cost;
+  // }, 0)
+  //  console.log(total);
+  //  if(total > 10){
+  //    console.log("Not enough credit remaining to purchase this")
+  //  }else{
   creditBalance.innerHTML = `Your Current Credit Balance: 
     ${userCreditBalance - total}`;
-   } 
+
 }
-let total = 0;
+
 //4. 
 // User can purchase a movie by typing the name of the movie. If movie is owned alredy, the string "You have already purchased this movie" should display and user is returned to select.
 
@@ -373,49 +373,80 @@ const form = document.getElementById('form');
 
 // compares movies to the input of the user and matches
 // adds all movies that the user has typed in
-let purchasedMovies = [];
+// let purchasedMovies = [];
 let filteredMovies = [];
+let total = 0;
+
 form.addEventListener('submit',function(e){
   e.preventDefault();
   // for matching to movie titles
   const movieInput = document.getElementById('movieInput').value.toUpperCase();
   // calls data here
   getData().then( movies =>{
+    
     // console.log(movies);
     for(let key in movies){
+      // gets genre of movie data
       // console.log([key]);
+      // gets array of each genre
       let moviesOne = movies[key]
       // console.log(moviesOne)
       for(let i = 0; i< moviesOne.length; i++){
+        // gets objects(movies) of each genre
         // console.log(moviesOne[i])
+        // gets cost of each genre
         // console.log(moviesOne[i].cost)
+        // console.log(filteredMovies)
         // matches input of the user to title of the movie
           if (movieInput === moviesOne[i].title.toUpperCase() ) {
-            console.log("found movie!")
             // pushes the input of the user to the purchased movies array if typed in correctly
-            filteredMovies.push(moviesOne[i])
-            // creates a new array that will filter out any duplicate entries from filteredMovies input
-            filteredMovies = filteredMovies.reduce((acc, cur) => {
-            let movieName = acc.find(movie => movie.title === cur.title);
-            // let movieDup = [cur].find(movie => movie.title === cur.title)
-            // if the titles do not match, add the movie to the filteredMovies
-            if (!movieName ) {
-              // console.log(cur);
-              // console.log(acc.concat([cur]));
-              return acc.concat([cur]);
-              // if they do match, do not add the movie to filteredMovies and alert that the movie is already owned
-            } else{
-              // this is the title of the movie to compare to
-              // console.log(movieInput);
-              // console.log(movieDup);
-              console.error(`You have already purchased ${movieName.title}`);
-              // console.log(acc);
-              return acc;
+            // total = filteredMovies.reduce((acc, cur) => {
+            //   console.log(acc)
+            //   console.log(cur.cost)
+            //   return acc + cur.cost
+            // }, 0)
+            // console.log(filteredMovies);
+            console.log(total);
+            if(total + 1 > 11 || total + 2 > 11 || total + 3 > 11){
+              console.log("Not enough credit remaining to purchase")
+              // filteredMovies.pop()
+              return false;
+            } 
+            else{
+              filteredMovies.push(moviesOne[i])
+              total = filteredMovies.reduce((acc, cur) => {
+                console.log(acc)
+                console.log(cur.cost)
+                let z = acc + cur.cost
+                if(z > 10){
+                  total = total - cur.cost
+                  console.log("Not enough credit remaining")
+                  filteredMovies.pop();
+                  return acc;
+                }else{ return acc + cur.cost; }
+                // return acc + cur.cost
+              }, 0)
+              // creates a new array that will filter out any duplicate entries from filteredMovies input
+              filteredMovies = filteredMovies.reduce((acc, cur) => {
+              let movieName = acc.find(movie => movie.title === cur.title)
+              // if the titles do not match, add the movie to the filteredMovies
+              if (!movieName && total < 11) {
+                console.log(total)
+                return acc.concat([cur]);
+                
+                // if they do match, do not add the movie to filteredMovies and alert that the movie is already owned
+              } else{
+                total = total - cur.cost;
+                console.error(`You have already purchased this movie`);
+                console.log(total);
+                console.log(cur.cost);
+                return acc;
+              }
+            }, [])
+            // console.log(purchasedMovies);
+            console.log(filteredMovies);
+            return;
             }
-          }, [])
-          // console.log(purchasedMovies);
-          console.log(filteredMovies);
-          return;
           }
         }
       }
