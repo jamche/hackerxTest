@@ -15,65 +15,75 @@
 </header>
 <main>
   <div class="wrapper">
-    <button id="allMovies">List all available movies</button>
-    <button id="usersMovies">Show My Movies</button>
-    <button id="userCreditBalance">My Credit Balance</button>
-
-    <div>
+    <!-- 4 original options -->
+    <div class="menuOptions">
+      <button id="allMovies">Show All Movies</button>
+      <button id="usersMovies">Show My Movies</button>
+      <button id="userCreditBalance">My Credit Balance</button>
+      <button id="purchase">Purchase Movies</button>
+      <!-- extra -->
+      <button id="showByGenre">Show Movies by Genre</button>
+    </div>
+    <div id = "purchaseForm">
       <form action="" id= "form">
         <label for="search">Purchase Movie</label>
         <input type="text" id="movieInput" placeholder="Title..." required="true"/>
         <input type="submit"/>
+        <p id="purchaseFormText"></p>
+        <p id="noCredit"></p>
       </form>
     </div>
 
-    <!-- <button onclick="getAction()">Show me action</button>
-    <button onclick="getComedy()">Show me comedy</button>
-    <button onclick="getDocumentary()">Show me documentary</button>
-    <button onclick="getDrama()">Show me drama</button>
-    <button onclick="getHorror()">Show me horror</button>
-    <button onclick="getRomance()">Show me romance</button>
-    <button onclick="getScifi()">Show me Scifi</button>
-    <button onclick="getThriller()">Show me Thriller</button> -->
+    <div class="showGenre">
+      <button id = "getActionButton">Action</button>
+      <button id = "getComedyButton">Comedy</button>
+      <button id = "getDocumentaryButton"  >Documentary</button>
+      <button id = "getDramaButton">Drama</button>
+      <button id = "getHorrorButton">Horror</button>
+      <button id = "getRomanceButton">Romance</button>
+      <button id = "getScifiButton">Scifi</button>
+      <button id = "getThrillerButton">Thriller</button>
+    </div>
+
     <div class="movieList">
       <!-- action movies -->
       <div class="action">
-        <h2>Action Movies</h2>
+        <h2 id ="actionTitle"></h2>
         <div class="actionList"></div>
       </div> 
        <!--comedy  -->
       <div class="comedy">
-        <h2>Comedy Movies</h2>
+        <h2 id="comedyTitle"></h2>
         <div class="comedyList"></div>
       </div>  
       <!-- docs -->
       <div class="documentary">
-        <h2>Documentary Movies</h2>
+        <h2 id="documentaryTitle"></h2>
         <div class="documentaryList"></div>
       </div>
       <!-- drama -->
       <div class="drama">
-        <h2>Drama Movies</h2>
+        <h2 id="dramaTitle"></h2>
         <div class="dramaList"></div>
       </div>
       <!-- horror -->
       <div class="horror">
-        <h2>Horror Movies</h2>
+        <h2 id="horrorTitle"></h2>
         <div class="horrorList"></div>
       </div>
       <!-- romance -->
       <div class="romance">
-        <h2>Romance Movies</h2>
+        <h2 id="romanceTitle"></h2>
         <div class="romanceList"></div>
       </div>
       <!-- scifi -->
       <div class="scifi">
-        <h2>Scifi Movies</h2>
+        <h2 id="scifiTitle"></h2>
         <div class="scifiList"></div>
       </div>
       <!-- thriller -->
       <div class="thriller">
-        <h2>Thriller Movies</h2>
+        <h2 id="thrillerTitle"></h2>
         <div class="thrillerList"></div>
       </div>
     </div>

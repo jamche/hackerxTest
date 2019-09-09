@@ -20,6 +20,19 @@ ul{
 h1{
   text-align: center;
 }
+.menuOptions{
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+#purchaseForm{
+  text-align: center;
+  width: 100%;
+  margin: 2% 0;
+}
+#purchaseForm p{
+  margin:2% 0;
+}
 .actionList,
 .comedyList,
 .documentaryList,
@@ -29,13 +42,29 @@ h1{
 .scifiList,
 .thrillerList{
     display: flex;
-    justify-content: space-between;
     flex-wrap:wrap;
 }
 .movies{
     display: flex;
     justify-content: space-evenly;
-    margin:2% 0;
+    margin:1% 0;
     flex-direction: column;
     width: 33.33%;
+}
+.movies li:first-child{
+  text-transform: capitalize;
+  font-weight: 700;
+}
+.movies li{
+  margin:1% 0;
+}
+.showGenre{
+  margin: 2% 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width:100%;
+}
+.showGenre button{
+  margin: 2% 0;
 }

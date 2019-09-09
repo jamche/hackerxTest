@@ -3,22 +3,35 @@
 
 // empty array to push list of movies inside
 const allMovies = []
-const actionMovies = []
-const comedyMovies = []
-const documentaryMovies = []
-const dramaMovies = []
-const horrorMovies = []
-const romanceMovies = []
-const scifiMovies = []
-const thrillerMovies = []
+let actionMovies = []
+let comedyMovies = []
+let documentaryMovies = []
+let dramaMovies = []
+let horrorMovies = []
+let romanceMovies = []
+let scifiMovies = []
+let thrillerMovies = []
 
 // link to data file
 const url = "available_movies.json";
 const movieList = document.querySelector(".movieList");
 const userList = document.querySelector(".userMovieList");
+userList.style.display = "none";
 
 
-  // remove "the" from words
+// puts movies in here as a list on the page
+let strAct = '';
+let strCom = '';
+let strDoc = '';
+let strDra = '';
+let strHor = '';
+let strRom = '';
+let strSci = '';
+let strThr = '';
+// puts users movie list on page when my movies is selected
+let strUsr = '';
+
+// remove "the" from words
 const removeArticles = (str) => {
   words = str.split(" ");
   if (words.length <= 1) return str;
@@ -27,15 +40,16 @@ const removeArticles = (str) => {
   return str;
 }
 
-// comparison function
-function compareStr(a,b){
+// comparison function to compare user input to movie data 
+const compareStr = (a,b) => {
   return typeof a ==='string' && typeof b === 'string' ?
   a.localeCompare(b, undefined, {sensitivity:'accent'}) === 0
   : a === b;
 }
 
-//show all movies
+//show all movies by calling each genre function ot populate movies with data
 const btnAll = document.getElementById("allMovies");
+// gets all movies
 btnAll.addEventListener('click', getAction);
 btnAll.addEventListener('click', getComedy);
 btnAll.addEventListener('click', getDrama);
@@ -44,17 +58,40 @@ btnAll.addEventListener('click', getHorror);
 btnAll.addEventListener('click', getRomance);
 btnAll.addEventListener('click', getScifi);
 btnAll.addEventListener('click', getThriller);
+// hides show all movies when clicked and show my users movies
 btnAll.addEventListener('click', toggleButton);
+// clears page of any movies purchased
 btnAll.addEventListener('click', clearMyMovies);
-btnAll.addEventListener('click', populateMovies)
+// displays the movie list when clicked again
+btnAll.addEventListener('click', populateMovies);
+// hides balance
+btnAll.addEventListener('click', noShowBal);
+// hides the input option to purchase a movie
+btnAll.addEventListener('click', hidePurchaseOption);
+// shows the purchased button if it was hidden previuosly
+btnAll.addEventListener('click', showPurchaseButton);
+// hides all the options to select by genre by default
+btnAll.addEventListener('click', hideGenreOptions);
 
+
+// shows all movies from movies data
 function populateMovies(){
   movieList.style.display = "block";
 }
-function clearMyMovies(){
+// shows users movies
+function populateUserMovies() {
+  userList.style.display = "block";
+}
+// clears all movies list from page
+function clearMovieList() {
+  movieList.style.display = "none";
+}
+// clears users movie from page
+function clearMyMovies() {
   userList.style.display = "none";
 }
 
+// toggles to show buttons when show all movies is clicked and show user movies
 function toggleButton(){
   if(btnAll.style.display === "none"){
     btnAll.style.display = "block";
@@ -72,25 +109,22 @@ function toggleButton(){
     strThr = '';
   }
 }
-
+function showAllMoviesButton() {
+  btnAll.style.display = "block";
+}
 // show users movies
 const btnUser = document.getElementById("usersMovies");
 btnUser.addEventListener('click', getUserMovies);
 btnUser.addEventListener('click', toggleButtonUser);
 btnUser.addEventListener('click', clearMovieList);
 btnUser.addEventListener('click', populateUserMovies);
-// btnUser.addEventListener('click', showMoviesAdded);
+btnUser.addEventListener('click', noShowBal);
+btnUser.addEventListener('click', hidePurchaseOption);
+btnUser.addEventListener('click', showPurchaseButton);
+btnUser.addEventListener('click', hideGenreOptions);
 
 
-// shhows users movies
-function populateUserMovies(){
-  userList.style.display = "block";
-}
-// clears all movie list
-function clearMovieList(){
-  movieList.style.display = "none";
-}
-
+// toggles to show and hide "show my movies" when clicked
 function toggleButtonUser() {
   if (btnUser.style.display === "none") {
     btnUser.style.display = "block";
@@ -100,26 +134,27 @@ function toggleButtonUser() {
     strUsr = '';
   }
 }
-// puts movies in here as a list on the page
-let strAct = '';
-let strCom = '';
-let strDoc = '';
-let strDra = '';
-let strHor = '';
-let strRom = '';
-let strSci = '';
-let strThr = '';
-// puts users movie list on page when my movies is selected
-let strUsr = '';
-
-// async function for getting movies from json
+// shows the button again
+function showUsersMoviesButton() {
+  btnUser.style.display = "block";
+}
+// async function for getting data from json available_movies.json
 async function getData() {
   const response = await fetch(url);
   const data = await response.json()
   return data;
 }
 
-// action
+const actionTitle = document.querySelector('#actionTitle');
+const comedyTitle = document.querySelector('#comedyTitle');
+const documentaryTitle = document.querySelector('#documentaryTitle');
+const dramaTitle = document.querySelector('#dramaTitle');
+const horrorTitle = document.querySelector('#horrorTitle');
+const romanceTitle = document.querySelector('#romanceTitle');
+const scifiTitle = document.querySelector('#scifiTitle');
+const thrillerTitle = document.querySelector('#thrillerTitle');
+
+// gets action movies
 function getAction(){
   getData()
   .then(data => {
@@ -129,6 +164,7 @@ function getAction(){
       const second = removeArticles(b.title.toUpperCase());
       return (first < second) ? -1 : (first > second) ? 1 : 0;
     })
+    actionTitle.innerHTML = `Action Movies`
     sorted.forEach(movie => {
       strAct += `
       <ul class=${'movies'}>
@@ -144,159 +180,164 @@ function getAction(){
 // comedy
 function getComedy() {
   getData()
-    .then(data => {
-      comedyMovies.push(data.comedy);
-      sorted = comedyMovies[0].sort(function (a, b) {
-        const first = removeArticles(a.title.toUpperCase());
-        const second = removeArticles(b.title.toUpperCase());
-        return (first < second) ? -1 : (first > second) ? 1 : 0;
-      })
-      sorted.forEach(movie => {
-        strCom += `
-      <ul class=${'movies'}>
-        <li> Title: ${movie.title}</li> 
-        <li> Rating: ${movie.rating}</li>
-        <li> Cost: ${movie.cost}</li> 
-      </ul>  
-      `
-      });
-      document.querySelector(".comedyList").innerHTML = strCom;
+  .then(data => {
+    comedyMovies.push(data.comedy);
+    sorted = comedyMovies[0].sort(function (a, b) {
+      const first = removeArticles(a.title.toUpperCase());
+      const second = removeArticles(b.title.toUpperCase());
+      return (first < second) ? -1 : (first > second) ? 1 : 0;
+    })
+    comedyTitle.innerHTML = `Comedy Movies`
+    sorted.forEach(movie => {
+      strCom += `
+    <ul class=${'movies'}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
     });
+    document.querySelector(".comedyList").innerHTML = strCom;
+  });
 }
 // documentary
 function getDocumentary() {
   getData()
-    .then(data => {
-      documentaryMovies.push(data.documentary);
-      sorted = documentaryMovies[0].sort(function (a, b) {
-        const first = removeArticles(a.title.toUpperCase());
-        const second = removeArticles(b.title.toUpperCase());
-        return (first < second) ? -1 : (first > second) ? 1 : 0;
-      })
-      sorted.forEach(movie => {
-        strDoc += `
-      <ul class=${'movies'}>
-        <li> Title: ${movie.title}</li> 
-        <li> Rating: ${movie.rating}</li>
-        <li> Cost: ${movie.cost}</li> 
-      </ul>  
-      `
-      });
-      document.querySelector(".documentaryList").innerHTML = strDoc;
+  .then(data => {
+    documentaryMovies.push(data.documentary);
+    sorted = documentaryMovies[0].sort(function (a, b) {
+      const first = removeArticles(a.title.toUpperCase());
+      const second = removeArticles(b.title.toUpperCase());
+      return (first < second) ? -1 : (first > second) ? 1 : 0;
+    })
+    documentaryTitle.innerHTML = `Documentary Movies`
+    sorted.forEach(movie => {
+      strDoc += `
+    <ul class=${'movies'}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
     });
+    document.querySelector(".documentaryList").innerHTML = strDoc;
+  });
 }
 // drama
 function getDrama() {
   getData()
-    .then(data => {
-      dramaMovies.push(data.drama);
-      sorted = dramaMovies[0].sort(function (a, b) {
-        const first = removeArticles(a.title.toUpperCase());
-        const second = removeArticles(b.title.toUpperCase());
-        return (first < second) ? -1 : (first > second) ? 1 : 0;
-      })
-      sorted.forEach(movie => {
-        strDra += `
-      <ul class=${'movies'}>
-        <li> Title: ${movie.title}</li> 
-        <li> Rating: ${movie.rating}</li>
-        <li> Cost: ${movie.cost}</li> 
-      </ul>  
-      `
-      });
-      document.querySelector(".dramaList").innerHTML = strDra;
+  .then(data => {
+    dramaMovies.push(data.drama);
+    sorted = dramaMovies[0].sort(function (a, b) {
+      const first = removeArticles(a.title.toUpperCase());
+      const second = removeArticles(b.title.toUpperCase());
+      return (first < second) ? -1 : (first > second) ? 1 : 0;
+    })
+    dramaTitle.innerHTML = `Drama Movies`
+    sorted.forEach(movie => {
+      strDra += `
+    <ul class=${'movies'}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
     });
+    document.querySelector(".dramaList").innerHTML = strDra;
+  });
 }
 // horror
 function getHorror() {
   getData()
-    .then(data => {
-      horrorMovies.push(data.horror);
-      sorted = horrorMovies[0].sort(function (a, b) {
-        const first = removeArticles(a.title.toUpperCase());
-        const second = removeArticles(b.title.toUpperCase());
-        return (first < second) ? -1 : (first > second) ? 1 : 0;
-      })
-      sorted.forEach(movie => {
-        strHor += `
-      <ul class=${'movies'}>
-        <li> Title: ${movie.title}</li> 
-        <li> Rating: ${movie.rating}</li>
-        <li> Cost: ${movie.cost}</li> 
-      </ul>  
-      `
-      });
-      document.querySelector(".horrorList").innerHTML = strHor;
+  .then(data => {
+    horrorMovies.push(data.horror);
+    sorted = horrorMovies[0].sort(function (a, b) {
+      const first = removeArticles(a.title.toUpperCase());
+      const second = removeArticles(b.title.toUpperCase());
+      return (first < second) ? -1 : (first > second) ? 1 : 0;
+    })
+    horrorTitle.innerHTML = `Horror Movies`
+    sorted.forEach(movie => {
+      strHor += `
+    <ul class=${'movies'}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
     });
+    document.querySelector(".horrorList").innerHTML = strHor;
+  });
 }
 // romance
 function getRomance() {
   getData()
-    .then(data => {
-      romanceMovies.push(data.romance);
-      sorted = romanceMovies[0].sort(function (a, b) {
-        const first = removeArticles(a.title.toUpperCase());
-        const second = removeArticles(b.title.toUpperCase());
-        return (first < second) ? -1 : (first > second) ? 1 : 0;
-      })
-      sorted.forEach(movie => {
-        strRom += `
-      <ul class=${'movies'}>
-        <li> Title: ${movie.title}</li> 
-        <li> Rating: ${movie.rating}</li>
-        <li> Cost: ${movie.cost}</li> 
-      </ul>  
-      `
-      });
-      document.querySelector(".romanceList").innerHTML = strRom;
+  .then(data => {
+    romanceMovies.push(data.romance);
+    sorted = romanceMovies[0].sort(function (a, b) {
+      const first = removeArticles(a.title.toUpperCase());
+      const second = removeArticles(b.title.toUpperCase());
+      return (first < second) ? -1 : (first > second) ? 1 : 0;
+    })
+    romanceTitle.innerHTML = `Romance Movies`
+    sorted.forEach(movie => {
+      strRom += `
+    <ul class=${'movies'}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
     });
+    document.querySelector(".romanceList").innerHTML = strRom;
+  });
 }
 // Scifi
 function getScifi() {
   getData()
-    .then(data => {
-      scifiMovies.push(data.scifi);
-      sorted = scifiMovies[0].sort(function (a, b) {
-        const first = removeArticles(a.title.toUpperCase());
-        const second = removeArticles(b.title.toUpperCase());
-        return (first < second) ? -1 : (first > second) ? 1 : 0;
-      })
-      sorted.forEach(movie => {
-        strSci += `
-      <ul class=${'movies'}>
-        <li> Title: ${movie.title}</li> 
-        <li> Rating: ${movie.rating}</li>
-        <li> Cost: ${movie.cost}</li> 
-      </ul>  
-      `
-      });
-      document.querySelector(".scifiList").innerHTML = strSci;
+  .then(data => {
+    scifiMovies.push(data.scifi);
+    sorted = scifiMovies[0].sort(function (a, b) {
+      const first = removeArticles(a.title.toUpperCase());
+      const second = removeArticles(b.title.toUpperCase());
+      return (first < second) ? -1 : (first > second) ? 1 : 0;
+    })
+    scifiTitle.innerHTML = `Scifi Movies`
+    sorted.forEach(movie => {
+      strSci += `
+    <ul class=${'movies'}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
     });
+    document.querySelector(".scifiList").innerHTML = strSci;
+  });
 }
 // thriller
 function getThriller() {
   getData()
-    .then(data => {
-      thrillerMovies.push(data.thriller);
-      sorted = thrillerMovies[0].sort(function (a, b) {
-        const first = removeArticles(a.title.toUpperCase());
-        const second = removeArticles(b.title.toUpperCase());
-        return (first < second) ? -1 : (first > second) ? 1 : 0;
-      })
-      sorted.forEach(movie => {
-      strThr += `
-      <ul class=${'movies'}>
-        <li> Title: ${movie.title}</li> 
-        <li> Rating: ${movie.rating}</li>
-        <li> Cost: ${movie.cost}</li> 
-      </ul>  
-      `
-      });
-      document.querySelector(".thrillerList").innerHTML = strThr;
+  .then(data => {
+    thrillerMovies.push(data.thriller);
+    sorted = thrillerMovies[0].sort(function (a, b) {
+      const first = removeArticles(a.title.toUpperCase());
+      const second = removeArticles(b.title.toUpperCase());
+      return (first < second) ? -1 : (first > second) ? 1 : 0;
+    })
+    thrillerTitle.innerHTML = `Thriller Movies`
+    sorted.forEach(movie => {
+    strThr += `
+    <ul class=${'movies'}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
     });
+    document.querySelector(".thrillerList").innerHTML = strThr;
+  });
 }
-   
-
 //2. Show all movies that the user has selected from my_movies.json
 const urlUserMovies = 'my_movies.json'
 const userMovies = []
@@ -305,30 +346,48 @@ async function getMyMovies() {
   const data = await response.json()
   return data;
 }
-function getUserMovies(){
 
-      filteredMovies.forEach(movie => {
-      strUsr += `
-      <ul class=${'movies'}>
-        <li> Title: ${movie.title}</li> 
-        <li> Cost: ${movie.cost}</li> 
-        <li> Rating: ${movie.rating}</li>
-        <li> Watched: ${movie.watched}</li>
-      </ul>  
-      `
-      });
-      document.querySelector(".userList").innerHTML = strUsr;
-    // });
+
+
+
+
+function getUserMovies(){
+  filteredMovies.forEach(movie => {
+  strUsr += `
+  <ul class=${'movies'}>
+    <li> Title: ${movie.title}</li> 
+    <li> Cost: ${movie.cost}</li> 
+    <li> Rating: ${movie.rating}</li>
+    <li> Watched: ${movie.watched}</li>
+  </ul>  
+  `
+  });
+  document.querySelector(".userList").innerHTML = strUsr;
 }
 //3. User is shown their credit balance and returned to the selection menu. Initial is 100 credits
-
 // user credit balance 
 // should be 100, 10 for test
 let userCreditBalance = 10;
 const btnShowCreditBal = document.getElementById('userCreditBalance');
 const creditBalance = document.querySelector('.creditBalance')
 btnShowCreditBal.addEventListener('click', showBalance);
-btnShowCreditBal.addEventListener('click', clearPage)
+// btnShowCreditBal.addEventListener('click', clearPage);
+btnShowCreditBal.addEventListener('click', showBal);
+btnShowCreditBal.addEventListener('click', clearMovieList);
+btnShowCreditBal.addEventListener('click', clearMyMovies);
+btnShowCreditBal.addEventListener('click', hidePurchaseOption);
+btnShowCreditBal.addEventListener('click', showAllMoviesButton);
+btnShowCreditBal.addEventListener('click', showUsersMoviesButton)
+btnShowCreditBal.addEventListener('click', showPurchaseButton);
+btnShowCreditBal.addEventListener('click', hideGenreOptions);
+
+// doesn't show balance on other options
+function noShowBal() {
+  creditBalance.style.display = "none";
+}
+function showBal(){
+  creditBalance.style.display ="block"
+}
 
 // clears the page and only shows user's balance
 function clearPage(){
@@ -339,41 +398,45 @@ function clearPage(){
 }
 // shows users credit balance
 function showBalance(){
-  // console.log(filteredMovies);
-  // // showCost();
-  // let total = filteredMovies.reduce((acc, cur) => {
-  //   return acc + cur.cost;
-  // }, 0)
-  //  console.log(total);
-  //  if(total > 10){
-  //    console.log("Not enough credit remaining to purchase this")
-  //  }else{
   creditBalance.innerHTML = `Your Current Credit Balance: 
     ${userCreditBalance - total}`;
-
 }
-
 //4. 
 // User can purchase a movie by typing the name of the movie. If movie is owned alredy, the string "You have already purchased this movie" should display and user is returned to select.
-
-// Each purchase deducts from the user's credit based on cost of the movie -- done
-// If not enough credits display the string "Not enough credit remaining to purchase this movie" -- need to work on this
 // when movie is purchased, it is added to my_movies.json  -- adding to array instead
-
-// purchase/submit purchase
 // 1. When typed in, adds the movie to my_movies.json ---> add to array
-// 2. If movie is owned already, display "You have already purchased this movie" and returned to selection --done
-// 3. Each purchase deducts from the credit balance, if not enough credit remaining to purchase display "Not enough credit remaining to purchase this"--- can deduct but need condition of no credit left and do not add
 
-btnPurchase = document.getElementById("purchaseMovie")
-// btnPurchase.addEventListener('click', purchaseMovie);
+// purchase button for form
+const btnPurchaseOption = document.getElementById("purchase");
+const purchaseForm = document.getElementById("purchaseForm");
+const purchaseText = document.getElementById("purchaseFormText");
+const noCreditText =document.getElementById("noCredit")
+purchaseForm.style.display = 'none';
 
-const movieTitles = []
+btnPurchaseOption.addEventListener('click', showPurchaseOption);
+btnPurchaseOption.addEventListener('click', noShowBal);
+btnPurchaseOption.addEventListener('click', showAllMoviesButton);
+btnPurchaseOption.addEventListener('click', showUsersMoviesButton)
+btnPurchaseOption.addEventListener('click', clearMovieList);
+btnPurchaseOption.addEventListener('click', clearMyMovies);
+btnPurchaseOption.addEventListener('click', hidePurchaseButton);
+btnPurchaseOption.addEventListener('click', hideGenreOptions);
+function hidePurchaseButton(){
+  btnPurchaseOption.style.display = 'none';
+}
+function showPurchaseButton() {
+  btnPurchaseOption.style.display = 'block';
+}
+
+function showPurchaseOption() {
+  purchaseForm.style.display = 'block';
+}
+function hidePurchaseOption() {
+  purchaseForm.style.display = 'none';
+}
+
 const form = document.getElementById('form');
-
-// compares movies to the input of the user and matches
 // adds all movies that the user has typed in
-// let purchasedMovies = [];
 let filteredMovies = [];
 let total = 0;
 
@@ -408,7 +471,9 @@ form.addEventListener('submit',function(e){
             // console.log(filteredMovies);
             console.log(total);
             if(total + 1 > 11 || total + 2 > 11 || total + 3 > 11){
-              console.log("Not enough credit remaining to purchase")
+              console.log("Not enough credit remaining to purchase this movie")
+              noCreditText.innerHTML = "Not enough credit remaining to purchase this movie"
+
               // filteredMovies.pop()
               return false;
             } 
@@ -420,8 +485,12 @@ form.addEventListener('submit',function(e){
                 let z = acc + cur.cost
                 if(z > 10){
                   total = total - cur.cost
-                  console.log("Not enough credit remaining")
+                  console.log("Not enough credit remaining to purchase this movie")
                   filteredMovies.pop();
+                  noCreditText.innerHTML = "Not enough credit remaining to purchase this movie"
+                  setTimeout(() => {
+                    noCreditText.innerHTML = '';
+                  }, 2000);
                   return acc;
                 }else{ return acc + cur.cost; }
                 // return acc + cur.cost
@@ -432,18 +501,22 @@ form.addEventListener('submit',function(e){
               // if the titles do not match, add the movie to the filteredMovies
               if (!movieName && total < 11) {
                 console.log(total)
+                purchaseText.innerHTML = "Found Movie!"
+                // noCreditText.innerHTML = '';
                 return acc.concat([cur]);
                 
                 // if they do match, do not add the movie to filteredMovies and alert that the movie is already owned
               } else{
                 total = total - cur.cost;
-                console.error(`You have already purchased this movie`);
+                console.error("You have already purchased this movie");
+                 purchaseText.innerHTML = "You have already purchase this movie"
+                 
+
                 console.log(total);
                 console.log(cur.cost);
                 return acc;
               }
             }, [])
-            // console.log(purchasedMovies);
             console.log(filteredMovies);
             return;
             }
@@ -451,11 +524,309 @@ form.addEventListener('submit',function(e){
         }
       }
     console.log("not found...")
+    purchaseText.innerHTML = "Can't find movie"
+
   })
   .catch(err => console.log(err))
   form.reset();
 })
 
+// extra here to show by genre
+// default options by genre hidden until show by genre button is clicked
+
+const showGenre = document.querySelector('.showGenre');
+showGenre.style.display = 'none';
+
+const getActionList = document.querySelector('.actionList')
+const getComedyList = document.querySelector('.comedyList')
+const getDocumentaryList = document.querySelector('.documentaryList')
+const getDramaList = document.querySelector('.dramaList')
+const getHorrorList = document.querySelector('.horrorList')
+const getRomanceList = document.querySelector('.romanceList')
+const getScifiList = document.querySelector('.scifiList')
+const getThrillerList = document.querySelector('.thrillerList')
+
+btnShowByGenre = document.getElementById('showByGenre');
+
+btnShowByGenre.addEventListener('click', showGenreOptions);
+btnShowByGenre.addEventListener('click', noShowBal);
+btnShowByGenre.addEventListener('click', showAllMoviesButton);
+btnShowByGenre.addEventListener('click', showUsersMoviesButton)
+btnShowByGenre.addEventListener('click', hidePurchaseOption);
+// btnShowByGenre.addEventListener('click', clearMovieList);
+btnShowByGenre.addEventListener('click', clearMyMovies);
+btnShowByGenre.addEventListener('click', clearLists);
+// btnShowByGenre.addEventListener('click', )
+
+// shows genre options buttons
+function showGenreOptions() {
+  showGenre.style.display = 'block'
+}
+// hides genre options buttons
+function hideGenreOptions() {
+  showGenre.style.display = 'none'
+}
+function initialMovies(){
+  movieList.style.display = "initial"
+}
+
+btnGetAction = document.getElementById('getActionButton')
+btnGetAction.addEventListener('click', getOnlyAction);
+
+btnGetComedy = document.getElementById('getComedyButton')
+btnGetComedy.addEventListener('click', getOnlyComedy);
+
+btnGetDocumentary = document.getElementById('getDocumentaryButton')
+btnGetDocumentary.addEventListener('click', getOnlyDocumentary);
+
+btnGetDrama = document.getElementById('getDramaButton')
+btnGetDrama.addEventListener('click', getOnlyDrama);
+
+btnGetHorror = document.getElementById('getHorrorButton')
+btnGetHorror.addEventListener('click', getOnlyHorror);
+
+btnGetRomance = document.getElementById('getRomanceButton')
+btnGetRomance.addEventListener('click', getOnlyRomance);
+
+btnGetScifi = document.getElementById('getScifiButton')
+btnGetScifi.addEventListener('click', getOnlyScifi);
+
+btnGetThriller = document.getElementById('getThrillerButton')
+btnGetThriller.addEventListener('click', getOnlyThriller);
+
+function clearLists(){
+  getActionList.innerHTML = '';
+  getComedyList.innerHTML = '';
+  getDocumentaryList.innerHTML = '';
+  getDramaList.innerHTML = '';
+  getHorrorList.innerHTML = '';
+  getRomanceList.innerHTML = '';
+  getScifiList.innerHTML = '';
+  getThrillerList.innerHTML = '';
+  strAct = '';
+  strCom = '';
+  strDoc = '';
+  strDra = '';
+  strHor = '';
+  strRom = '';
+  strSci = '';
+  strThr = '';
+}
+
+function getOnlyAction(){
+  getAction();
+  movieList.style.display ='block'
+  getActionList.innerHTML = 'flex'
+  getComedyList.innerHTML = '';
+  getDocumentaryList.innerHTML = '';
+  getDramaList.innerHTML = '';
+  getHorrorList.innerHTML = '';
+  getRomanceList.innerHTML = '';
+  getScifiList.innerHTML = '';
+  getThrillerList.innerHTML = '';
+  strCom = '';
+  strDoc = '';
+  strDra = '';
+  strHor = '';
+  strRom = '';
+  strSci = '';
+  strThr = '';
+  // shows all genre options other than action since it was clicked and showing
+  btnGetAction.style.display = 'none';
+  btnGetComedy.style.display = 'flex';
+  btnGetDocumentary.style.display = 'flex';
+  btnGetDrama.style.display = 'flex';
+  btnGetHorror.style.display = 'flex';
+  btnGetRomance.style.display = 'flex';
+  btnGetScifi.style.display = 'flex';
+  btnGetThriller.style.display = 'flex';
+}
+function getOnlyComedy() {
+  getComedy();
+  movieList.style.display = 'block'
+  getActionList.innerHTML = '';
+  getComedyList.innerHTML = 'flex';
+  getDocumentaryList.innerHTML = '';
+  getDramaList.innerHTML = '';
+  getHorrorList.innerHTML = '';
+  getRomanceList.innerHTML = '';
+  getScifiList.innerHTML = '';
+  getThrillerList.innerHTML = '';
+  strAct = '';
+  strDoc = '';
+  strDra = '';
+  strHor = '';
+  strRom = '';
+  strSci = '';
+  strThr = '';
+  btnGetAction.style.display = 'flex';
+  btnGetComedy.style.display = 'none';
+  btnGetDocumentary.style.display = 'flex';
+  btnGetDrama.style.display = 'flex';
+  btnGetHorror.style.display = 'flex';
+  btnGetRomance.style.display = 'flex';
+  btnGetScifi.style.display = 'flex';
+  btnGetThriller.style.display = 'flex';
+}
+function getOnlyDocumentary() {
+  getDocumentary();
+  movieList.style.display = 'block'
+  getActionList.innerHTML = '';
+  getComedyList.innerHTML = '';
+  getDocumentaryList.innerHTML = 'flex';
+  getDramaList.innerHTML = '';
+  getHorrorList.innerHTML = '';
+  getRomanceList.innerHTML = '';
+  getScifiList.innerHTML = '';
+  getThrillerList.innerHTML = '';
+  strAct = '';
+  strCom = '';
+  strDra = '';
+  strHor = '';
+  strRom = '';
+  strSci = '';
+  strThr = '';
+  btnGetAction.style.display = 'flex';
+  btnGetComedy.style.display = 'flex';
+  btnGetDocumentary.style.display = 'none';
+  btnGetDrama.style.display = 'flex';
+  btnGetHorror.style.display = 'flex';
+  btnGetRomance.style.display = 'flex';
+  btnGetScifi.style.display = 'flex';
+  btnGetThriller.style.display = 'flex';
+}
+function getOnlyDrama() {
+  getDrama();
+  movieList.style.display = 'block'
+  getActionList.innerHTML = '';
+  getComedyList.innerHTML = '';
+  getDocumentaryList.innerHTML = '';
+  getDramaList.innerHTML = 'flex';
+  getHorrorList.innerHTML = '';
+  getRomanceList.innerHTML = '';
+  getScifiList.innerHTML = '';
+  getThrillerList.innerHTML = '';
+  strAct = '';
+  strCom = '';
+  strDoc = '';
+  strHor = '';
+  strRom = '';
+  strSci = '';
+  strThr = '';
+  btnGetAction.style.display = 'flex';
+  btnGetComedy.style.display = 'flex';
+  btnGetDocumentary.style.display = 'flex';
+  btnGetDrama.style.display = 'none';
+  btnGetHorror.style.display = 'flex';
+  btnGetRomance.style.display = 'flex';
+  btnGetScifi.style.display = 'flex';
+  btnGetThriller.style.display = 'flex';
+} 
+function getOnlyHorror() {
+  getHorror();
+  movieList.style.display = 'block'
+  getActionList.innerHTML = '';
+  getComedyList.innerHTML = '';
+  getDocumentaryList.innerHTML = '';
+  getDramaList.innerHTML = '';
+  getHorrorList.innerHTML = 'flex';
+  getRomanceList.innerHTML = '';
+  getScifiList.innerHTML = '';
+  getThrillerList.innerHTML = '';
+  strAct = '';
+  strCom = '';
+  strDra = '';
+  strRom = '';
+  strSci = '';
+  strThr = '';
+  btnGetAction.style.display = 'flex';
+  btnGetComedy.style.display = 'flex';
+  btnGetDocumentary.style.display = 'flex';
+  btnGetDrama.style.display = 'flex';
+  btnGetHorror.style.display = 'none';
+  btnGetRomance.style.display = 'flex';
+  btnGetScifi.style.display = 'flex';
+  btnGetThriller.style.display = 'flex';
+}
+function getOnlyRomance() {
+  getRomance();
+  movieList.style.display = 'block'
+  getActionList.innerHTML = '';
+  getComedyList.innerHTML = '';
+  getDocumentaryList.innerHTML = '';
+  getDramaList.innerHTML = '';
+  getHorrorList.innerHTML = '';
+  getRomanceList.innerHTML = 'flex';
+  getScifiList.innerHTML = '';
+  getThrillerList.innerHTML = '';
+  strAct = '';
+  strCom = '';
+  strDoc = '';
+  strDra = '';
+  strHor = '';
+  strSci = '';
+  strThr = '';
+  btnGetAction.style.display = 'flex';
+  btnGetComedy.style.display = 'flex';
+  btnGetDocumentary.style.display = 'flex';
+  btnGetDrama.style.display = 'flex';
+  btnGetHorror.style.display = 'flex';
+  btnGetRomance.style.display = 'none';
+  btnGetScifi.style.display = 'flex';
+  btnGetThriller.style.display = 'flex';
+}
+function getOnlyScifi() {
+  getScifi();
+  movieList.style.display = 'block'
+  getActionList.innerHTML = '';
+  getComedyList.innerHTML = '';
+  getDocumentaryList.innerHTML = '';
+  getDramaList.innerHTML = '';
+  getHorrorList.innerHTML = '';
+  getRomanceList.innerHTML = '';
+  getScifiList.innerHTML = 'flex';
+  getThrillerList.innerHTML = '';
+  strAct = '';
+  strCom = '';
+  strDoc = '';
+  strDra = '';
+  strRom = '';
+  strThr = '';
+  btnGetAction.style.display = 'flex';
+  btnGetComedy.style.display = 'flex';
+  btnGetDocumentary.style.display = 'flex';
+  btnGetDrama.style.display = 'flex';
+  btnGetHorror.style.display = 'flex';
+  btnGetRomance.style.display = 'flex';
+  btnGetScifi.style.display = 'none';
+  btnGetThriller.style.display = 'flex';
+}
+function getOnlyThriller() {
+  getThriller();
+  movieList.style.display = 'block'
+  getActionList.innerHTML = '';
+  getComedyList.innerHTML = '';
+  getDocumentaryList.innerHTML = '';
+  getDramaList.innerHTML = '';
+  getHorrorList.innerHTML = '';
+  getRomanceList.innerHTML = '';
+  getScifiList.innerHTML = '';
+  getThrillerList.innerHTML = 'flex';
+  strAct = '';
+  strCom = '';
+  strDoc = '';
+  strDra = '';
+  strRom = '';
+  strSci = '';
+  btnGetAction.style.display = 'flex';
+  btnGetComedy.style.display = 'flex';
+  btnGetDocumentary.style.display = 'flex';
+  btnGetDrama.style.display = 'flex';
+  btnGetHorror.style.display = 'flex';
+  btnGetRomance.style.display = 'flex';
+  btnGetScifi.style.display = 'flex';
+  btnGetThriller.style.display = 'none';
+}
 // on submit of input, input value is matched to all movies
 // if matched 
 
@@ -463,10 +834,6 @@ form.addEventListener('submit',function(e){
 
 // when submitted, movie is pushed in to purchased movies
 // when purchased movies is filtered, if statement is comparing to pruchased movies, so alert pops up everytime there is a duplicate in purchased movies --- need to fix
-
-// purchased movies is filtered to filtered movies
-// need fo fix way when filtered movies to not push if total cost of movies is > remaining credit balance
-
 
 
 // maybe use this for search function *********
