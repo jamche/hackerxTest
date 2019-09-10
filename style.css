@@ -6,6 +6,16 @@ article,aside,details,figcaption,figure,footer,header,hgroup,nav,section,summary
 
 .visuallyHidden:not(:focus):not(:active) { position: absolute; width: 1px; height: 1px; margin: -1px;border: 0;padding: 0;white-space: nowrap;clip-path: inset(100%);clip: rect(00 0 0);overflow: hidden;}
 
+/* fonts to use */
+/* headers */
+/* font-family: 'Roboto', sans-serif; */
+
+/* rest */
+/* font-family: 'Open Sans', sans-serif; */
+html{
+  color:#AE030E;
+  background: #000;
+}
 h1,h2,h3,p,a,ul,li{
   margin: 0;
   padding: 0;
@@ -19,6 +29,75 @@ ul{
 
 h1{
   text-align: center;
+  font-family: 'Roboto', sans-serif;
+}
+h2{
+  font-family: 'Roboto', sans-serif;
+  color:#FFF5EE;
+}
+p,
+ul,
+li,
+a,
+button,
+label{
+  font-family: 'Open Sans', sans-serif;
+  color:#FFF5EE;
+}
+input{
+  font-family: 'Open Sans', sans-serif;
+}
+button{
+  background: #AE030E;
+  border: none;
+  color:#FFF5EE;
+}
+h2{
+  text-decoration: underline;
+}
+.menuOptions{
+  margin: 1% 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.menuOptions button,
+.showGenre button{
+  padding: 1% 2%;
+  margin: 1%;
+}
+#purchaseForm{
+  text-align: center;
+  width: 100%;
+  margin: 2% 0;
+}
+#purchaseForm p{
+  margin:2% 0;
+}
+#form label{
+  color: #fff5ee;
+  background: #AE030E;
+  padding: 10px;
+}
+#formSubmit{
+  border: none;
+  padding: 10px;
+  color: #FFF5EE;
+  margin: 0;
+  background: #AE030E;
+  margin-left: -4px;
+} 
+#movieInput{
+  background: #FFF5EE;
+  border: none;
+  margin-left: 10px;
+  padding: 10px;
+}
+.movieList,
+.userMovieList,
+.creditBalance{
+  margin-top: 2%;
 }
 .actionList,
 .comedyList,
@@ -29,13 +108,28 @@ h1{
 .scifiList,
 .thrillerList{
     display: flex;
-    justify-content: space-between;
     flex-wrap:wrap;
+    margin: 2% 0;
 }
 .movies{
     display: flex;
     justify-content: space-evenly;
-    margin:2% 0;
+    margin:1% 0;
     flex-direction: column;
     width: 33.33%;
+}
+.movies li:first-child{
+  text-transform: capitalize;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+.movies li{
+  margin:1% 0;
+}
+.showGenre{
+  margin: 2% 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width:100%;
 }
