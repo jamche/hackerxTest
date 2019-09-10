@@ -165,6 +165,11 @@ const clearPage = () => {
 const showBalance = () => {
   creditBalance.innerHTML = `<p>Your Current Credit Balance: 
     ${userCreditBalance - total}</p>`;
+  setTimeout(() => {
+    showAll();
+    purchaseForm.style.display= 'none';
+    creditBalance.innerHTML = '';
+  }, 3000);
 }
 
 // Purchase Button functions
@@ -183,6 +188,10 @@ const hidePurchaseOption = () => {
 }
 
 // Show Genre options buttons
+const showByGenre= () => {
+  btnShowByGenre.style.display = 'block';
+}
+
 const showGenreOptions = () => {
   showGenre.style.display = "flex"
 }
@@ -192,6 +201,16 @@ const hideGenreOptions = () => {
 }
 const initialMovies = () => {
   movieList.style.display = "initial"
+}
+
+
+const showAll = () =>{
+  showAllMoviesButton();
+  showUsersMoviesButton();
+  showBal();
+  showPurchaseButton();
+  showByGenre();
+  purchaseForm.style.display = "block";
 }
 
 // gets action movies
@@ -470,7 +489,7 @@ form.addEventListener("submit",(e) =>{
       // gets array of each genre
       let moviesOne = movies[key]
       for(let i = 0; i< moviesOne.length; i++){
-        // gets objects(movies) of each genre
+        // iterates through each movie of each genre
         // matches input of the user to title of the movie
           if (movieInput === moviesOne[i].title.toUpperCase() ) {
             // pushes the input of the user to the purchased movies array if typed in correctly
@@ -511,10 +530,12 @@ form.addEventListener("submit",(e) =>{
                 } else{
                   total = total - cur.cost;
                   // console.error("You have already purchased this movie");
-                  purchaseText.innerHTML = "You have already purchase this movie."
+                  purchaseText.innerHTML = "You have already purchased this movie."
                   setTimeout(() => {
+                    showAll();
                     purchaseText.innerHTML = "";
-                  }, 3000);
+                    purchaseForm.style.display = "none";
+                  }, 2000);
                   return acc;
                 }
               }, [])
@@ -905,7 +926,24 @@ btnGetThriller.addEventListener("click", getOnlyThriller);
 
 // search form
 
-// const searchForm = document.getElementById
+const searchForm = document.getElementById('searchForm')
+
+searchForm.addEventListener("submit",(e) =>{
+  e.preventDefault();
+  const searchMovieInput = document.getElementById('searchMovie').value.toUpperCase();
+
+  getData()
+  .then(movies =>{
+    console.log(movies)
+    for(let key in movies){
+      let moviesOne = movies[key]
+      console.log(moviesOne);
+      for(let i = 0 ; i< moviesOne.length;i++){
+        console.log(moviesOne[i]);
+      }
+    }
+  })
+})
 
 
 // when submitted, movie is pushed in to purchased movies

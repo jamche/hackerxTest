@@ -65,7 +65,7 @@ h2{
 .menuOptions button,
 .showGenre button{
   padding: 1% 2%;
-  margin: 1%;
+  margin: 1% 0;
 }
 #purchaseForm{
   text-align: center;
