@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Hackerx Code Challenge</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,13 +28,21 @@
     </div>
     <div id = "purchaseForm">
       <form action="" id= "form">
-        <label for="search">Purchase Movie</label>
+        <label for="movieInput">Purchase Movie</label>
         <input type="text" id="movieInput" placeholder="Title..." required="true"/>
-        <input type="submit"/>
+        <input id = "formSubmit"type="submit"/>
         <p id="purchaseFormText"></p>
         <p id="noCredit"></p>
       </form>
     </div>
+
+    <!-- <div id="searchForm">
+      <form action="" id = "searchForm">
+        <label for="searchMovie"></label>
+        <input type="text" id="movieSearch">
+        <input type="submit" id ="searchFormSubmit" >
+      </form>
+    </div> -->
 
     <div class="showGenre">
       <button id = "getActionButton">Action</button>

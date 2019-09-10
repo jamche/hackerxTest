@@ -2,7 +2,7 @@
 //1. Show all movies from json file that the user can select from available_movies, sorted alphabetically and by genre showing title/rating/cost
 
 // empty array to push list of movies inside
-const allMovies = []
+// const allMovies = []
 let actionMovies = []
 let comedyMovies = []
 let documentaryMovies = []
@@ -18,6 +18,10 @@ const movieList = document.querySelector(".movieList");
 const userList = document.querySelector(".userMovieList");
 userList.style.display = "none";
 
+// user movies json file(putting data in array instead, sorry I have not learned node.js to post to a json file)
+const urlUserMovies = "my_movies.json"
+const userMovies = []
+
 // puts movies in here as a list on the page
 let strAct = "";
 let strCom = "";
@@ -29,6 +33,16 @@ let strSci = "";
 let strThr = "";
 // puts users movie list on page when my movies is selected
 let strUsr = "";
+
+//target title headers
+const actionTitle = document.querySelector("#actionTitle");
+const comedyTitle = document.querySelector("#comedyTitle");
+const documentaryTitle = document.querySelector("#documentaryTitle");
+const dramaTitle = document.querySelector("#dramaTitle");
+const horrorTitle = document.querySelector("#horrorTitle");
+const romanceTitle = document.querySelector("#romanceTitle");
+const scifiTitle = document.querySelector("#scifiTitle");
+const thrillerTitle = document.querySelector("#thrillerTitle");
 
 // remove any articles from the titles from words
 const removeArticles = (str) => {
@@ -45,7 +59,325 @@ const compareStr = (a,b) => {
   a.localeCompare(b, undefined, {sensitivity:"accent"}) === 0
   : a === b;
 }
+// shows all movies from movies data
+const populateMovies = () =>{
+  movieList.style.display = "block";
+}
+// shows users movies
+const populateUserMovies = () =>{
+  userList.style.display = "block";
+}
+// clears all movies list from page
+const clearMovieList = () =>{
+  movieList.style.display = "none";
+}
+// clears users movie from page
+const clearMyMovies = () =>{
+  userList.style.display = "none";
+}
 
+// toggles to show buttons when show all movies is clicked and show user movies
+const toggleButton = () =>{
+  if(btnAll.style.display === "none"){
+    btnAll.style.display = "block";
+  } else{
+    btnAll.style.display = "none"
+    btnUser.style.display = "block";
+    //deletes and sets again list of movies
+    strAct = "";
+    strCom = "";
+    strDoc = "";
+    strDra = "";
+    strHor = "";
+    strRom = "";
+    strSci = "";
+    strThr = "";
+  }
+}
+const showAllMoviesButton = () => {
+  btnAll.style.display = "block";
+}
+// toggles to show and hide "show my movies" when clicked
+const toggleButtonUser = () => {
+  if (btnUser.style.display === "none") {
+    btnUser.style.display = "block";
+  } else {
+    btnUser.style.display = "none";
+    btnAll.style.display = "block";
+    strUsr = '';
+  }
+}
+// shows the button again
+const showUsersMoviesButton = () => {
+  btnUser.style.display = "block";
+}
+// async function for getting data from json available_movies.json
+const getData = async () => {
+  const response = await fetch(url);
+  const data = await response.json()
+  return data;
+}
+//2. Show all movies that the user has selected from my_movies.json
+const getMyMovies = async () => {
+  const response = await fetch(urlUserMovies);
+  const data = await response.json()
+  return data;
+}
+// gets user movies when input is added
+const getUserMovies = () => {
+  filteredMovies.forEach(movie => {
+    // random boolean for if watched or not
+    let random = Math.random() >= 0.5;
+    // console.log(random);
+    if (random > 0.5) {
+      movie.watched = 'Watched'
+    } else {
+      movie.watched = 'Not Watched'
+    }
+    strUsr += `
+  <ul class=${"movies"}>
+    <li> Title: ${movie.title}</li> 
+    <li> Cost: ${movie.cost}</li> 
+    <li> Rating: ${movie.rating}</li>
+    <li> Watched: ${movie.watched}</li>
+  </ul>  
+  `
+  });
+  document.querySelector(".userList").innerHTML = strUsr;
+}
+
+// Credit Balance functions
+// doesn't show balance on other options
+const noShowBal = () => {
+  creditBalance.style.display = "none";
+}
+const showBal = () => {
+  creditBalance.style.display = "block"
+}
+// clears the page and only shows user's balance
+const clearPage = () => {
+  movieList.style.display = "none";
+  userList.style.display = "none";
+  btnAll.style.display = "block";
+  btnUser.style.display = "block";
+}
+// shows users credit balance
+const showBalance = () => {
+  creditBalance.innerHTML = `<p>Your Current Credit Balance: 
+    ${userCreditBalance - total}</p>`;
+}
+
+// Purchase Button functions
+const hidePurchaseButton = () => {
+  btnPurchaseOption.style.display = "none";
+}
+const showPurchaseButton = () => {
+  btnPurchaseOption.style.display = "block";
+}
+
+const showPurchaseOption = () => {
+  purchaseForm.style.display = "block";
+}
+const hidePurchaseOption = () => {
+  purchaseForm.style.display = "none";
+}
+
+// Show Genre options buttons
+const showGenreOptions = () => {
+  showGenre.style.display = "flex"
+}
+// hides genre options buttons
+const hideGenreOptions = () => {
+  showGenre.style.display = "none"
+}
+const initialMovies = () => {
+  movieList.style.display = "initial"
+}
+
+// gets action movies
+const getAction = () => {
+  getData()
+    .then(data => {
+      actionMovies.push(data.action);
+      sorted = actionMovies[0].sort( (a, b) =>{
+        const first = removeArticles(a.title.toUpperCase());
+        const second = removeArticles(b.title.toUpperCase());
+        return (first < second) ? -1 : (first > second) ? 1 : 0;
+      })
+      actionTitle.innerHTML = `Action Movies`
+      sorted.forEach(movie => {
+        strAct += `
+      <ul class=${"movies"}>
+        <li> Title: ${movie.title}</li> 
+        <li> Rating: ${movie.rating}</li>
+        <li> Cost: ${movie.cost}</li> 
+      </ul>  
+      `
+      });
+      document.querySelector(".actionList").innerHTML = strAct;
+    });
+}
+// comedy
+const getComedy = () => {
+  getData()
+    .then(data => {
+      comedyMovies.push(data.comedy);
+      sorted = comedyMovies[0].sort( (a, b) =>{
+        const first = removeArticles(a.title.toUpperCase());
+        const second = removeArticles(b.title.toUpperCase());
+        return (first < second) ? -1 : (first > second) ? 1 : 0;
+      })
+      comedyTitle.innerHTML = `Comedy Movies`
+      sorted.forEach(movie => {
+        strCom += `
+    <ul class=${"movies"}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
+      });
+      document.querySelector(".comedyList").innerHTML = strCom;
+    });
+}
+// documentary
+const getDocumentary = () => {
+  getData()
+    .then(data => {
+      documentaryMovies.push(data.documentary);
+      sorted = documentaryMovies[0].sort( (a, b) =>{
+        const first = removeArticles(a.title.toUpperCase());
+        const second = removeArticles(b.title.toUpperCase());
+        return (first < second) ? -1 : (first > second) ? 1 : 0;
+      })
+      documentaryTitle.innerHTML = `Documentary Movies`
+      sorted.forEach(movie => {
+        strDoc += `
+    <ul class=${"movies"}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
+      });
+      document.querySelector(".documentaryList").innerHTML = strDoc;
+    });
+}
+// drama
+const getDrama = () => {
+  getData()
+    .then(data => {
+      dramaMovies.push(data.drama);
+      sorted = dramaMovies[0].sort( (a, b) =>{
+        const first = removeArticles(a.title.toUpperCase());
+        const second = removeArticles(b.title.toUpperCase());
+        return (first < second) ? -1 : (first > second) ? 1 : 0;
+      })
+      dramaTitle.innerHTML = `Drama Movies`
+      sorted.forEach(movie => {
+        strDra += `
+    <ul class=${"movies"}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
+      });
+      document.querySelector(".dramaList").innerHTML = strDra;
+    });
+}
+// horror
+const getHorror = () => {
+  getData()
+    .then(data => {
+      horrorMovies.push(data.horror);
+      sorted = horrorMovies[0].sort( (a, b) =>{
+        const first = removeArticles(a.title.toUpperCase());
+        const second = removeArticles(b.title.toUpperCase());
+        return (first < second) ? -1 : (first > second) ? 1 : 0;
+      })
+      horrorTitle.innerHTML = `Horror Movies`
+      sorted.forEach(movie => {
+        strHor += `
+    <ul class=${"movies"}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
+      });
+      document.querySelector(".horrorList").innerHTML = strHor;
+    });
+}
+// romance
+const getRomance = () => {
+  getData()
+    .then(data => {
+      romanceMovies.push(data.romance);
+      sorted = romanceMovies[0].sort( (a, b) =>{
+        const first = removeArticles(a.title.toUpperCase());
+        const second = removeArticles(b.title.toUpperCase());
+        return (first < second) ? -1 : (first > second) ? 1 : 0;
+      })
+      romanceTitle.innerHTML = `Romance Movies`
+      sorted.forEach(movie => {
+        strRom += `
+    <ul class=${"movies"}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
+      });
+      document.querySelector(".romanceList").innerHTML = strRom;
+    });
+}
+// Scifi
+const getScifi = () => {
+  getData()
+    .then(data => {
+      scifiMovies.push(data.scifi);
+      sorted = scifiMovies[0].sort( (a, b) =>{
+        const first = removeArticles(a.title.toUpperCase());
+        const second = removeArticles(b.title.toUpperCase());
+        return (first < second) ? -1 : (first > second) ? 1 : 0;
+      })
+      scifiTitle.innerHTML = `Scifi Movies`
+      sorted.forEach(movie => {
+        strSci += `
+    <ul class=${"movies"}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
+      });
+      document.querySelector(".scifiList").innerHTML = strSci;
+    });
+}
+// thriller
+const getThriller = () => {
+  getData()
+    .then(data => {
+      thrillerMovies.push(data.thriller);
+      sorted = thrillerMovies[0].sort( (a, b) =>{
+        const first = removeArticles(a.title.toUpperCase());
+        const second = removeArticles(b.title.toUpperCase());
+        return (first < second) ? -1 : (first > second) ? 1 : 0;
+      })
+      thrillerTitle.innerHTML = `Thriller Movies`
+      sorted.forEach(movie => {
+        strThr += `
+    <ul class=${"movies"}>
+      <li> Title: ${movie.title}</li> 
+      <li> Rating: ${movie.rating}</li>
+      <li> Cost: ${movie.cost}</li> 
+    </ul>  
+    `
+      });
+      document.querySelector(".thrillerList").innerHTML = strThr;
+    });
+}
 //show all movies by calling each genre function ot populate movies with data
 const btnAll = document.getElementById("allMovies");
 // gets all movies
@@ -72,45 +404,6 @@ btnAll.addEventListener("click", showPurchaseButton);
 // hides all the options to select by genre by default
 btnAll.addEventListener("click", hideGenreOptions);
 
-
-// shows all movies from movies data
-function populateMovies(){
-  movieList.style.display = "block";
-}
-// shows users movies
-function populateUserMovies() {
-  userList.style.display = "block";
-}
-// clears all movies list from page
-function clearMovieList() {
-  movieList.style.display = "none";
-}
-// clears users movie from page
-function clearMyMovies() {
-  userList.style.display = "none";
-}
-
-// toggles to show buttons when show all movies is clicked and show user movies
-function toggleButton(){
-  if(btnAll.style.display === "none"){
-    btnAll.style.display = "block";
-  } else{
-    btnAll.style.display = "none"
-    btnUser.style.display = "block";
-    //deletes and sets again list of movies
-    strAct = "";
-    strCom = "";
-    strDoc = "";
-    strDra = "";
-    strHor = "";
-    strRom = "";
-    strSci = "";
-    strThr = "";
-  }
-}
-function showAllMoviesButton() {
-  btnAll.style.display = "block";
-}
 // show users movies
 const btnUser = document.getElementById("usersMovies");
 btnUser.addEventListener("click", getUserMovies);
@@ -123,243 +416,6 @@ btnUser.addEventListener("click", showPurchaseButton);
 btnUser.addEventListener("click", hideGenreOptions);
 
 
-// toggles to show and hide "show my movies" when clicked
-function toggleButtonUser() {
-  if (btnUser.style.display === "none") {
-    btnUser.style.display = "block";
-  } else {
-    btnUser.style.display = "none";
-    btnAll.style.display = "block";
-    strUsr = '';
-  }
-}
-// shows the button again
-function showUsersMoviesButton() {
-  btnUser.style.display = "block";
-}
-// async function for getting data from json available_movies.json
-async function getData() {
-  const response = await fetch(url);
-  const data = await response.json()
-  return data;
-}
-
-const actionTitle = document.querySelector("#actionTitle");
-const comedyTitle = document.querySelector("#comedyTitle");
-const documentaryTitle = document.querySelector("#documentaryTitle");
-const dramaTitle = document.querySelector("#dramaTitle");
-const horrorTitle = document.querySelector("#horrorTitle");
-const romanceTitle = document.querySelector("#romanceTitle");
-const scifiTitle = document.querySelector("#scifiTitle");
-const thrillerTitle = document.querySelector("#thrillerTitle");
-
-// gets action movies
-function getAction(){
-  getData()
-  .then(data => {
-    actionMovies.push(data.action);
-    sorted = actionMovies[0].sort(function(a,b){
-      const first = removeArticles(a.title.toUpperCase());
-      const second = removeArticles(b.title.toUpperCase());
-      return (first < second) ? -1 : (first > second) ? 1 : 0;
-    })
-    actionTitle.innerHTML = `Action Movies`
-    sorted.forEach(movie => {
-      strAct += `
-      <ul class=${"movies"}>
-        <li> Title: ${movie.title}</li> 
-        <li> Rating: ${movie.rating}</li>
-        <li> Cost: ${movie.cost}</li> 
-      </ul>  
-      `
-    });
-    document.querySelector(".actionList").innerHTML = strAct;
-  });
-}
-// comedy
-function getComedy() {
-  getData()
-  .then(data => {
-    comedyMovies.push(data.comedy);
-    sorted = comedyMovies[0].sort(function (a, b) {
-      const first = removeArticles(a.title.toUpperCase());
-      const second = removeArticles(b.title.toUpperCase());
-      return (first < second) ? -1 : (first > second) ? 1 : 0;
-    })
-    comedyTitle.innerHTML = `Comedy Movies`
-    sorted.forEach(movie => {
-      strCom += `
-    <ul class=${"movies"}>
-      <li> Title: ${movie.title}</li> 
-      <li> Rating: ${movie.rating}</li>
-      <li> Cost: ${movie.cost}</li> 
-    </ul>  
-    `
-    });
-    document.querySelector(".comedyList").innerHTML = strCom;
-  });
-}
-// documentary
-function getDocumentary() {
-  getData()
-  .then(data => {
-    documentaryMovies.push(data.documentary);
-    sorted = documentaryMovies[0].sort(function (a, b) {
-      const first = removeArticles(a.title.toUpperCase());
-      const second = removeArticles(b.title.toUpperCase());
-      return (first < second) ? -1 : (first > second) ? 1 : 0;
-    })
-    documentaryTitle.innerHTML = `Documentary Movies`
-    sorted.forEach(movie => {
-      strDoc += `
-    <ul class=${"movies"}>
-      <li> Title: ${movie.title}</li> 
-      <li> Rating: ${movie.rating}</li>
-      <li> Cost: ${movie.cost}</li> 
-    </ul>  
-    `
-    });
-    document.querySelector(".documentaryList").innerHTML = strDoc;
-  });
-}
-// drama
-function getDrama() {
-  getData()
-  .then(data => {
-    dramaMovies.push(data.drama);
-    sorted = dramaMovies[0].sort(function (a, b) {
-      const first = removeArticles(a.title.toUpperCase());
-      const second = removeArticles(b.title.toUpperCase());
-      return (first < second) ? -1 : (first > second) ? 1 : 0;
-    })
-    dramaTitle.innerHTML = `Drama Movies`
-    sorted.forEach(movie => {
-      strDra += `
-    <ul class=${"movies"}>
-      <li> Title: ${movie.title}</li> 
-      <li> Rating: ${movie.rating}</li>
-      <li> Cost: ${movie.cost}</li> 
-    </ul>  
-    `
-    });
-    document.querySelector(".dramaList").innerHTML = strDra;
-  });
-}
-// horror
-function getHorror() {
-  getData()
-  .then(data => {
-    horrorMovies.push(data.horror);
-    sorted = horrorMovies[0].sort(function (a, b) {
-      const first = removeArticles(a.title.toUpperCase());
-      const second = removeArticles(b.title.toUpperCase());
-      return (first < second) ? -1 : (first > second) ? 1 : 0;
-    })
-    horrorTitle.innerHTML = `Horror Movies`
-    sorted.forEach(movie => {
-      strHor += `
-    <ul class=${"movies"}>
-      <li> Title: ${movie.title}</li> 
-      <li> Rating: ${movie.rating}</li>
-      <li> Cost: ${movie.cost}</li> 
-    </ul>  
-    `
-    });
-    document.querySelector(".horrorList").innerHTML = strHor;
-  });
-}
-// romance
-function getRomance() {
-  getData()
-  .then(data => {
-    romanceMovies.push(data.romance);
-    sorted = romanceMovies[0].sort(function (a, b) {
-      const first = removeArticles(a.title.toUpperCase());
-      const second = removeArticles(b.title.toUpperCase());
-      return (first < second) ? -1 : (first > second) ? 1 : 0;
-    })
-    romanceTitle.innerHTML = `Romance Movies`
-    sorted.forEach(movie => {
-      strRom += `
-    <ul class=${"movies"}>
-      <li> Title: ${movie.title}</li> 
-      <li> Rating: ${movie.rating}</li>
-      <li> Cost: ${movie.cost}</li> 
-    </ul>  
-    `
-    });
-    document.querySelector(".romanceList").innerHTML = strRom;
-  });
-}
-// Scifi
-function getScifi() {
-  getData()
-  .then(data => {
-    scifiMovies.push(data.scifi);
-    sorted = scifiMovies[0].sort(function (a, b) {
-      const first = removeArticles(a.title.toUpperCase());
-      const second = removeArticles(b.title.toUpperCase());
-      return (first < second) ? -1 : (first > second) ? 1 : 0;
-    })
-    scifiTitle.innerHTML = `Scifi Movies`
-    sorted.forEach(movie => {
-      strSci += `
-    <ul class=${"movies"}>
-      <li> Title: ${movie.title}</li> 
-      <li> Rating: ${movie.rating}</li>
-      <li> Cost: ${movie.cost}</li> 
-    </ul>  
-    `
-    });
-    document.querySelector(".scifiList").innerHTML = strSci;
-  });
-}
-// thriller
-function getThriller() {
-  getData()
-  .then(data => {
-    thrillerMovies.push(data.thriller);
-    sorted = thrillerMovies[0].sort(function (a, b) {
-      const first = removeArticles(a.title.toUpperCase());
-      const second = removeArticles(b.title.toUpperCase());
-      return (first < second) ? -1 : (first > second) ? 1 : 0;
-    })
-    thrillerTitle.innerHTML = `Thriller Movies`
-    sorted.forEach(movie => {
-    strThr += `
-    <ul class=${"movies"}>
-      <li> Title: ${movie.title}</li> 
-      <li> Rating: ${movie.rating}</li>
-      <li> Cost: ${movie.cost}</li> 
-    </ul>  
-    `
-    });
-    document.querySelector(".thrillerList").innerHTML = strThr;
-  });
-}
-//2. Show all movies that the user has selected from my_movies.json
-const urlUserMovies = "my_movies.json"
-const userMovies = []
-async function getMyMovies() {
-  const response = await fetch(urlUserMovies);
-  const data = await response.json()
-  return data;
-}
-
-
-function getUserMovies(){
-  filteredMovies.forEach(movie => {
-  strUsr += `
-  <ul class=${"movies"}>
-    <li> Title: ${movie.title}</li> 
-    <li> Cost: ${movie.cost}</li> 
-    <li> Rating: ${movie.rating}</li>
-    <li> Watched: ${movie.watched}</li>
-  </ul>  
-  `
-  });
-  document.querySelector(".userList").innerHTML = strUsr;
-}
 //3. User is shown their credit balance and returned to the selection menu. Initial is 100 credits
 // user credit balance 
 // should be 100, 10 for test
@@ -377,26 +433,6 @@ btnShowCreditBal.addEventListener("click", showUsersMoviesButton)
 btnShowCreditBal.addEventListener("click", showPurchaseButton);
 btnShowCreditBal.addEventListener("click", hideGenreOptions);
 
-// doesn't show balance on other options
-function noShowBal() {
-  creditBalance.style.display = "none";
-}
-function showBal(){
-  creditBalance.style.display ="block"
-}
-
-// clears the page and only shows user's balance
-function clearPage(){
-  movieList.style.display = "none";
-  userList.style.display = "none";
-  btnAll.style.display = "block";
-  btnUser.style.display = "block";
-}
-// shows users credit balance
-function showBalance(){
-  creditBalance.innerHTML = `Your Current Credit Balance: 
-    ${userCreditBalance - total}`;
-}
 //4. 
 // User can purchase a movie by typing the name of the movie. If movie is owned alredy, the string "You have already purchased this movie" should display and user is returned to select.
 // when movie is purchased, it is added to my_movies.json  -- adding to array instead
@@ -417,26 +453,13 @@ btnPurchaseOption.addEventListener("click", clearMovieList);
 btnPurchaseOption.addEventListener("click", clearMyMovies);
 btnPurchaseOption.addEventListener("click", hidePurchaseButton);
 btnPurchaseOption.addEventListener("click", hideGenreOptions);
-function hidePurchaseButton(){
-  btnPurchaseOption.style.display = "none";
-}
-function showPurchaseButton() {
-  btnPurchaseOption.style.display = "block";
-}
-
-function showPurchaseOption() {
-  purchaseForm.style.display = "block";
-}
-function hidePurchaseOption() {
-  purchaseForm.style.display = "none";
-}
 
 const form = document.getElementById("form");
 // adds all movies that the user has typed in
 let filteredMovies = [];
 let total = 0;
 
-form.addEventListener("submit",function(e){
+form.addEventListener("submit",(e) =>{
   e.preventDefault();
   // for matching to movie titles
   const movieInput = document.getElementById("movieInput").value.toUpperCase();
@@ -468,10 +491,10 @@ form.addEventListener("submit",function(e){
                 if(accumCost > 10){
                   total = total - cur.cost
                   filteredMovies.pop();
-                  noCreditText.innerHTML = "Not enough credit remaining to purchase this movie."
+                  purchaseText.innerHTML = "Not enough credit remaining to purchase this movie."
                   setTimeout(() => {
                     noCreditText.innerHTML = "";
-                  }, 2000);
+                  }, 3000);
                   return acc;
                 }else{ 
                   // if enough cost, return the total of added movie
@@ -483,30 +506,355 @@ form.addEventListener("submit",function(e){
               let movieName = acc.find(movie => movie.title === cur.title)
                 // if the titles do not match and total is less than remaining credit, add the movie to the filteredMovies
                 if (!movieName && total < 11) {
-                  purchaseText.innerHTML = "Found Movie!"
                   return acc.concat([cur]);                
                   // if they do match, do not add the movie to filteredMovies and alert that the movie is already owned
                 } else{
                   total = total - cur.cost;
                   // console.error("You have already purchased this movie");
                   purchaseText.innerHTML = "You have already purchase this movie."
+                  setTimeout(() => {
+                    purchaseText.innerHTML = "";
+                  }, 3000);
                   return acc;
                 }
               }, [])
-            // console.log(filteredMovies);
             return;
             }
           }
         }
       }
-    // console.log("not found...")
     purchaseText.innerHTML = "Can't find movie"
+    setTimeout(() => {
+      purchaseText.innerHTML = ""
+    }, 1000);
   })
   .catch(err => console.log(err))
   form.reset();
 })
 // extra here to show by genre
 // default options by genre hidden until show by genre button is clicked
+
+// clears lists when show genre is clicked(to empty out if "show all movies" was already clicked)
+const clearLists = () => {
+  getActionList.innerHTML = "";
+  getComedyList.innerHTML = "";
+  getDocumentaryList.innerHTML = "";
+  getDramaList.innerHTML = "";
+  getHorrorList.innerHTML = "";
+  getRomanceList.innerHTML = "";
+  getScifiList.innerHTML = "";
+  getThrillerList.innerHTML = "";
+  strAct = "";
+  strCom = "";
+  strDoc = "";
+  strDra = "";
+  strHor = "";
+  strRom = "";
+  strSci = "";
+  strThr = "";
+  actionTitle.innerHTML = '';
+  comedyTitle.innerHTML = '';
+  documentaryTitle.innerHTML = '';
+  dramaTitle.innerHTML = '';
+  horrorTitle.innerHTML = '';
+  romanceTitle.innerHTML = '';
+  scifiTitle.innerHTML = '';
+  thrillerTitle.innerHTML = '';
+}
+
+const getOnlyAction = () => {
+  getAction();
+  movieList.style.display = "block"
+  getActionList.innerHTML = "flex"
+  getComedyList.innerHTML = "";
+  getDocumentaryList.innerHTML = "";
+  getDramaList.innerHTML = "";
+  getHorrorList.innerHTML = "";
+  getRomanceList.innerHTML = "";
+  getScifiList.innerHTML = "";
+  getThrillerList.innerHTML = "";
+  strCom = "";
+  strDoc = "";
+  strDra = "";
+  strHor = "";
+  strRom = "";
+  strSci = "";
+  strThr = "";
+  // empties titles when clicked for each genre, repopulates it based on which genre is selected
+  actionTitle.innerHTML = 'Action Movies';
+  comedyTitle.innerHTML = '';
+  documentaryTitle.innerHTML = '';
+  dramaTitle.innerHTML = '';
+  horrorTitle.innerHTML = '';
+  romanceTitle.innerHTML = '';
+  scifiTitle.innerHTML = '';
+  thrillerTitle.innerHTML = '';
+  // shows all genre option buttons other than action since it was clicked and showing, same for all functions below
+  btnGetAction.style.display = "none";
+  btnGetComedy.style.display = "flex";
+  btnGetDocumentary.style.display = "flex";
+  btnGetDrama.style.display = "flex";
+  btnGetHorror.style.display = "flex";
+  btnGetRomance.style.display = "flex";
+  btnGetScifi.style.display = "flex";
+  btnGetThriller.style.display = "flex";
+}
+const getOnlyComedy = () => {
+  getComedy();
+  movieList.style.display = "block"
+  getActionList.innerHTML = "";
+  getComedyList.innerHTML = "flex";
+  getDocumentaryList.innerHTML = "";
+  getDramaList.innerHTML = "";
+  getHorrorList.innerHTML = "";
+  getRomanceList.innerHTML = "";
+  getScifiList.innerHTML = "";
+  getThrillerList.innerHTML = "";
+  strAct = "";
+  strDoc = "";
+  strDra = "";
+  strHor = "";
+  strRom = "";
+  strSci = "";
+  strThr = "";
+  // empties titles when clicked for each genre, repopulates it based on which genre is selected
+  actionTitle.innerHTML = '';
+  comedyTitle.innerHTML = 'Comedy Movies';
+  documentaryTitle.innerHTML = '';
+  dramaTitle.innerHTML = '';
+  horrorTitle.innerHTML = '';
+  romanceTitle.innerHTML = '';
+  scifiTitle.innerHTML = '';
+  thrillerTitle.innerHTML = '';
+  // 
+  btnGetAction.style.display = "flex";
+  btnGetComedy.style.display = "none";
+  btnGetDocumentary.style.display = "flex";
+  btnGetDrama.style.display = "flex";
+  btnGetHorror.style.display = "flex";
+  btnGetRomance.style.display = "flex";
+  btnGetScifi.style.display = "flex";
+  btnGetThriller.style.display = "flex";
+}
+const getOnlyDocumentary = () => {
+  getDocumentary();
+  movieList.style.display = "block"
+  getActionList.innerHTML = "";
+  getComedyList.innerHTML = "";
+  getDocumentaryList.innerHTML = "flex";
+  getDramaList.innerHTML = "";
+  getHorrorList.innerHTML = "";
+  getRomanceList.innerHTML = "";
+  getScifiList.innerHTML = "";
+  getThrillerList.innerHTML = "";
+  strAct = "";
+  strCom = "";
+  strDra = "";
+  strHor = "";
+  strRom = "";
+  strSci = "";
+  strThr = "";
+  // empties titles when clicked for each genre, repopulates it based on which genre is selected
+  actionTitle.innerHTML = '';
+  comedyTitle.innerHTML = '';
+  documentaryTitle.innerHTML = 'Documentary Movies';
+  dramaTitle.innerHTML = '';
+  horrorTitle.innerHTML = '';
+  romanceTitle.innerHTML = '';
+  scifiTitle.innerHTML = '';
+  thrillerTitle.innerHTML = '';
+  //
+  btnGetAction.style.display = "flex";
+  btnGetComedy.style.display = "flex";
+  btnGetDocumentary.style.display = "none";
+  btnGetDrama.style.display = "flex";
+  btnGetHorror.style.display = "flex";
+  btnGetRomance.style.display = "flex";
+  btnGetScifi.style.display = "flex";
+  btnGetThriller.style.display = "flex";
+}
+const getOnlyDrama = () => {
+  getDrama();
+  movieList.style.display = "block"
+  getActionList.innerHTML = "";
+  getComedyList.innerHTML = "";
+  getDocumentaryList.innerHTML = "";
+  getDramaList.innerHTML = "flex";
+  getHorrorList.innerHTML = "";
+  getRomanceList.innerHTML = "";
+  getScifiList.innerHTML = "";
+  getThrillerList.innerHTML = "";
+  strAct = "";
+  strCom = "";
+  strDoc = "";
+  strHor = "";
+  strRom = "";
+  strSci = "";
+  strThr = "";
+  // empties titles when clicked for each genre, repopulates it based on which genre is selected
+  actionTitle.innerHTML = '';
+  comedyTitle.innerHTML = '';
+  documentaryTitle.innerHTML = '';
+  dramaTitle.innerHTML = 'Drama Movies';
+  horrorTitle.innerHTML = '';
+  romanceTitle.innerHTML = '';
+  scifiTitle.innerHTML = '';
+  thrillerTitle.innerHTML = '';
+  //
+  btnGetAction.style.display = "flex";
+  btnGetComedy.style.display = "flex";
+  btnGetDocumentary.style.display = "flex";
+  btnGetDrama.style.display = "none";
+  btnGetHorror.style.display = "flex";
+  btnGetRomance.style.display = "flex";
+  btnGetScifi.style.display = "flex";
+  btnGetThriller.style.display = "flex";
+}
+const getOnlyHorror = () => {
+  getHorror();
+  movieList.style.display = "block"
+  getActionList.innerHTML = "";
+  getComedyList.innerHTML = "";
+  getDocumentaryList.innerHTML = "";
+  getDramaList.innerHTML = "";
+  getHorrorList.innerHTML = "flex";
+  getRomanceList.innerHTML = "";
+  getScifiList.innerHTML = "";
+  getThrillerList.innerHTML = "";
+  strAct = "";
+  strCom = "";
+  strDra = "";
+  strRom = "";
+  strSci = "";
+  strThr = "";
+  // empties titles when clicked for each genre, repopulates it based on which genre is selected
+  actionTitle.innerHTML = '';
+  comedyTitle.innerHTML = '';
+  documentaryTitle.innerHTML = '';
+  dramaTitle.innerHTML = '';
+  horrorTitle.innerHTML = 'Horror Movies';
+  romanceTitle.innerHTML = '';
+  scifiTitle.innerHTML = '';
+  thrillerTitle.innerHTML = '';
+  //
+  btnGetAction.style.display = "flex";
+  btnGetComedy.style.display = "flex";
+  btnGetDocumentary.style.display = "flex";
+  btnGetDrama.style.display = "flex";
+  btnGetHorror.style.display = "none";
+  btnGetRomance.style.display = "flex";
+  btnGetScifi.style.display = "flex";
+  btnGetThriller.style.display = "flex";
+}
+const getOnlyRomance = () => {
+  getRomance();
+  movieList.style.display = "block"
+  getActionList.innerHTML = "";
+  getComedyList.innerHTML = "";
+  getDocumentaryList.innerHTML = "";
+  getDramaList.innerHTML = "";
+  getHorrorList.innerHTML = "";
+  getRomanceList.innerHTML = "flex";
+  getScifiList.innerHTML = "";
+  getThrillerList.innerHTML = "";
+  strAct = "";
+  strCom = "";
+  strDoc = "";
+  strDra = "";
+  strHor = "";
+  strSci = "";
+  strThr = "";
+  // empties titles when clicked for each genre, repopulates it based on which genre is selected
+  actionTitle.innerHTML = '';
+  comedyTitle.innerHTML = '';
+  documentaryTitle.innerHTML = '';
+  dramaTitle.innerHTML = '';
+  horrorTitle.innerHTML = '';
+  romanceTitle.innerHTML = 'Romance Movies';
+  scifiTitle.innerHTML = '';
+  thrillerTitle.innerHTML = '';
+  //
+  btnGetAction.style.display = "flex";
+  btnGetComedy.style.display = "flex";
+  btnGetDocumentary.style.display = "flex";
+  btnGetDrama.style.display = "flex";
+  btnGetHorror.style.display = "flex";
+  btnGetRomance.style.display = "none";
+  btnGetScifi.style.display = "flex";
+  btnGetThriller.style.display = "flex";
+}
+const getOnlyScifi = () => {
+  getScifi();
+  movieList.style.display = "block"
+  getActionList.innerHTML = "";
+  getComedyList.innerHTML = "";
+  getDocumentaryList.innerHTML = "";
+  getDramaList.innerHTML = "";
+  getHorrorList.innerHTML = "";
+  getRomanceList.innerHTML = "";
+  getScifiList.innerHTML = "flex";
+  getThrillerList.innerHTML = "";
+  strAct = "";
+  strCom = "";
+  strDoc = "";
+  strDra = "";
+  strRom = "";
+  strThr = "";
+  // empties titles when clicked for each genre, repopulates it based on which genre is selected
+  actionTitle.innerHTML = '';
+  comedyTitle.innerHTML = '';
+  documentaryTitle.innerHTML = '';
+  dramaTitle.innerHTML = '';
+  horrorTitle.innerHTML = '';
+  romanceTitle.innerHTML = '';
+  scifiTitle.innerHTML = 'Scifi Movies';
+  thrillerTitle.innerHTML = '';
+  //
+  btnGetAction.style.display = "flex";
+  btnGetComedy.style.display = "flex";
+  btnGetDocumentary.style.display = "flex";
+  btnGetDrama.style.display = "flex";
+  btnGetHorror.style.display = "flex";
+  btnGetRomance.style.display = "flex";
+  btnGetScifi.style.display = "none";
+  btnGetThriller.style.display = "flex";
+}
+const getOnlyThriller = () => {
+  getThriller();
+  movieList.style.display = "block"
+  getActionList.innerHTML = "";
+  getComedyList.innerHTML = "";
+  getDocumentaryList.innerHTML = "";
+  getDramaList.innerHTML = "";
+  getHorrorList.innerHTML = "";
+  getRomanceList.innerHTML = "";
+  getScifiList.innerHTML = "";
+  getThrillerList.innerHTML = "flex";
+  strAct = "";
+  strCom = "";
+  strDoc = "";
+  strDra = "";
+  strRom = "";
+  strSci = "";
+  // empties titles when clicked for each genre, repopulates it based on which genre is selected
+  actionTitle.innerHTML = '';
+  comedyTitle.innerHTML = '';
+  documentaryTitle.innerHTML = '';
+  dramaTitle.innerHTML = '';
+  horrorTitle.innerHTML = '';
+  romanceTitle.innerHTML = '';
+  scifiTitle.innerHTML = '';
+  thrillerTitle.innerHTML = 'Thriller Movies';
+  //
+  btnGetAction.style.display = "flex";
+  btnGetComedy.style.display = "flex";
+  btnGetDocumentary.style.display = "flex";
+  btnGetDrama.style.display = "flex";
+  btnGetHorror.style.display = "flex";
+  btnGetRomance.style.display = "flex";
+  btnGetScifi.style.display = "flex";
+  btnGetThriller.style.display = "none";
+}
 
 const showGenre = document.querySelector(".showGenre");
 showGenre.style.display = "none";
@@ -529,18 +877,6 @@ btnShowByGenre.addEventListener("click", showUsersMoviesButton)
 btnShowByGenre.addEventListener("click", hidePurchaseOption);
 btnShowByGenre.addEventListener("click", clearMyMovies);
 btnShowByGenre.addEventListener("click", clearLists);
-
-// shows genre options buttons
-function showGenreOptions() {
-  showGenre.style.display = "block"
-}
-// hides genre options buttons
-function hideGenreOptions() {
-  showGenre.style.display = "none"
-}
-function initialMovies(){
-  movieList.style.display = "initial"
-}
 
 btnGetAction = document.getElementById("getActionButton")
 btnGetAction.addEventListener("click", getOnlyAction);
@@ -566,239 +902,12 @@ btnGetScifi.addEventListener("click", getOnlyScifi);
 btnGetThriller = document.getElementById("getThrillerButton")
 btnGetThriller.addEventListener("click", getOnlyThriller);
 
-function clearLists(){
-  getActionList.innerHTML = "";
-  getComedyList.innerHTML = "";
-  getDocumentaryList.innerHTML = "";
-  getDramaList.innerHTML = "";
-  getHorrorList.innerHTML = "";
-  getRomanceList.innerHTML = "";
-  getScifiList.innerHTML = "";
-  getThrillerList.innerHTML = "";
-  strAct = "";
-  strCom = "";
-  strDoc = "";
-  strDra = "";
-  strHor = "";
-  strRom = "";
-  strSci = "";
-  strThr = "";
-}
 
-function getOnlyAction(){
-  getAction();
-  movieList.style.display ="block"
-  getActionList.innerHTML = "flex"
-  getComedyList.innerHTML = "";
-  getDocumentaryList.innerHTML = "";
-  getDramaList.innerHTML = "";
-  getHorrorList.innerHTML = "";
-  getRomanceList.innerHTML = "";
-  getScifiList.innerHTML = "";
-  getThrillerList.innerHTML = "";
-  strCom = "";
-  strDoc = "";
-  strDra = "";
-  strHor = "";
-  strRom = "";
-  strSci = "";
-  strThr = "";
-  // shows all genre options other than action since it was clicked and showing
-  btnGetAction.style.display = "none";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
-}
-function getOnlyComedy() {
-  getComedy();
-  movieList.style.display = "block"
-  getActionList.innerHTML = "";
-  getComedyList.innerHTML = "flex";
-  getDocumentaryList.innerHTML = "";
-  getDramaList.innerHTML = "";
-  getHorrorList.innerHTML = "";
-  getRomanceList.innerHTML = "";
-  getScifiList.innerHTML = "";
-  getThrillerList.innerHTML = "";
-  strAct = "";
-  strDoc = "";
-  strDra = "";
-  strHor = "";
-  strRom = "";
-  strSci = "";
-  strThr = "";
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "none";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
-}
-function getOnlyDocumentary() {
-  getDocumentary();
-  movieList.style.display = "block"
-  getActionList.innerHTML = "";
-  getComedyList.innerHTML = "";
-  getDocumentaryList.innerHTML = "flex";
-  getDramaList.innerHTML = "";
-  getHorrorList.innerHTML = "";
-  getRomanceList.innerHTML = "";
-  getScifiList.innerHTML = "";
-  getThrillerList.innerHTML = "";
-  strAct = "";
-  strCom = "";
-  strDra = "";
-  strHor = "";
-  strRom = "";
-  strSci = "";
-  strThr = "";
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "none";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
-}
-function getOnlyDrama() {
-  getDrama();
-  movieList.style.display = "block"
-  getActionList.innerHTML = "";
-  getComedyList.innerHTML = "";
-  getDocumentaryList.innerHTML = "";
-  getDramaList.innerHTML = "flex";
-  getHorrorList.innerHTML = "";
-  getRomanceList.innerHTML = "";
-  getScifiList.innerHTML = "";
-  getThrillerList.innerHTML = "";
-  strAct = "";
-  strCom = "";
-  strDoc = "";
-  strHor = "";
-  strRom = "";
-  strSci = "";
-  strThr = "";
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "none";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
-} 
-function getOnlyHorror() {
-  getHorror();
-  movieList.style.display = "block"
-  getActionList.innerHTML = "";
-  getComedyList.innerHTML = "";
-  getDocumentaryList.innerHTML = "";
-  getDramaList.innerHTML = "";
-  getHorrorList.innerHTML = "flex";
-  getRomanceList.innerHTML = "";
-  getScifiList.innerHTML = "";
-  getThrillerList.innerHTML = "";
-  strAct = "";
-  strCom = "";
-  strDra = "";
-  strRom = "";
-  strSci = "";
-  strThr = "";
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "none";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
-}
-function getOnlyRomance() {
-  getRomance();
-  movieList.style.display = "block"
-  getActionList.innerHTML = "";
-  getComedyList.innerHTML = "";
-  getDocumentaryList.innerHTML = "";
-  getDramaList.innerHTML = "";
-  getHorrorList.innerHTML = "";
-  getRomanceList.innerHTML = "flex";
-  getScifiList.innerHTML = "";
-  getThrillerList.innerHTML = "";
-  strAct = "";
-  strCom = "";
-  strDoc = "";
-  strDra = "";
-  strHor = "";
-  strSci = "";
-  strThr = "";
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "none";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
-}
-function getOnlyScifi() {
-  getScifi();
-  movieList.style.display = "block"
-  getActionList.innerHTML = "";
-  getComedyList.innerHTML = "";
-  getDocumentaryList.innerHTML = "";
-  getDramaList.innerHTML = "";
-  getHorrorList.innerHTML = "";
-  getRomanceList.innerHTML = "";
-  getScifiList.innerHTML = "flex";
-  getThrillerList.innerHTML = "";
-  strAct = "";
-  strCom = "";
-  strDoc = "";
-  strDra = "";
-  strRom = "";
-  strThr = "";
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "none";
-  btnGetThriller.style.display = "flex";
-}
-function getOnlyThriller() {
-  getThriller();
-  movieList.style.display = "block"
-  getActionList.innerHTML = "";
-  getComedyList.innerHTML = "";
-  getDocumentaryList.innerHTML = "";
-  getDramaList.innerHTML = "";
-  getHorrorList.innerHTML = "";
-  getRomanceList.innerHTML = "";
-  getScifiList.innerHTML = "";
-  getThrillerList.innerHTML = "flex";
-  strAct = "";
-  strCom = "";
-  strDoc = "";
-  strDra = "";
-  strRom = "";
-  strSci = "";
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "none";
-}
+// search form
+
+// const searchForm = document.getElementById
+
+
 // when submitted, movie is pushed in to purchased movies
 // when purchased movies is filtered, if statement is comparing to pruchased movies, so alert pops up everytime there is a duplicate in purchased movies --- need to fix
 
