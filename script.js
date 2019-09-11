@@ -1,8 +1,6 @@
 // 4 Options the user can select
 //1. Show all movies from json file that the user can select from available_movies, sorted alphabetically and by genre showing title/rating/cost
-
 // empty array to push list of movies inside
-// const allMovies = []
 let actionMovies = []
 let comedyMovies = []
 let documentaryMovies = []
@@ -44,6 +42,14 @@ const romanceTitle = document.querySelector("#romanceTitle");
 const scifiTitle = document.querySelector("#scifiTitle");
 const thrillerTitle = document.querySelector("#thrillerTitle");
 
+// search form variables
+const searchForm = document.getElementById("searchForm");
+const searchFormSub = document.getElementById("searchFormSub")
+const btnSearchMovie = document.getElementById("searchForMovie");
+const searchList = document.querySelector(".searchList")
+let searchedMovies = [];
+let strSearch = ""
+
 // remove any articles from the titles from words
 const removeArticles = (str) => {
   words = str.split(" ");
@@ -75,6 +81,7 @@ const clearMovieList = () =>{
 const clearMyMovies = () =>{
   userList.style.display = "none";
 }
+
 
 // toggles to show buttons when show all movies is clicked and show user movies
 const toggleButton = () =>{
@@ -523,7 +530,6 @@ form.addEventListener("submit",(e) =>{
         // matches input of the user to title of the movie
           if (movieInput === moviesOne[i].title.toUpperCase() ) {
             // pushes the input of the user to the purchased movies array if typed in correctly
-            console.log(total);
             if(total + 1 > 11 || total + 2 > 11 || total + 3 > 11){
               noCreditText.innerHTML = "Not enough credit remaining to purchase this movie."
               return false;
@@ -1014,7 +1020,9 @@ const onlyGenre = () => {
   clearMyMovies();
   clearLists();
   hideSearch();
+  hideSearchList();
 }
+
 btnShowByGenre = document.getElementById("showByGenre");
 btnShowByGenre.addEventListener("click", onlyGenre)
 
@@ -1042,14 +1050,8 @@ btnGetScifi.addEventListener("click", getOnlyScifi);
 btnGetThriller = document.getElementById("getThrillerButton")
 btnGetThriller.addEventListener("click", getOnlyThriller);
 
-// search form
-
-const searchForm = document.getElementById("searchForm");
-const btnSearchMovie = document.getElementById("searchForMovie");
-const searchList = document.querySelector(".searchList")
-let searchedMovies = [];
-let strSearch = ""
 searchForm.style.display = 'none';
+// search form submit
 searchForm.addEventListener("submit",(e) =>{
   e.preventDefault();
   const searchMovieInput = document.getElementById('searchMovie').value.toUpperCase();
@@ -1058,15 +1060,13 @@ searchForm.addEventListener("submit",(e) =>{
   .then(movies =>{
     for(let key in movies){
       let moviesOne = movies[key]
-      let comparedMovie = moviesOne.filter( movie => {
+       comparedMovie = moviesOne.filter( movie => {
         // slices first three characters to match
         let searchedMovie = movie.title.slice(0,3).toUpperCase();
         // returns movie  if slicedInput matches newWord
         return searchedMovie === slicedInput
-
       })
       searchedMovies.push(comparedMovie);
-      console.log('Nothing found')
     }
     for(let i =0; i < searchedMovies.length;i++){
         let searched = searchedMovies[i];
@@ -1083,34 +1083,20 @@ searchForm.addEventListener("submit",(e) =>{
         searchList.innerHTML = strSearch;
       }
   })
+  searchFormSub.reset();
   searchForm.style.display = "none";
   movieList.style.display = "none";
 })
-
-btnSearchMovie.addEventListener("click", newSearch)
-btnSearchMovie.addEventListener("click", hideGenreOptions);
-btnSearchMovie.addEventListener("click", clearMyMovies);
-btnSearchMovie.addEventListener("click", clearLists);
-btnSearchMovie.addEventListener("click", showPurchaseButton);
-btnSearchMovie.addEventListener("click", hidePurchaseOption);
-
-
-
-
-// find dups
-// searchedMovies = searchedMovies.reduce((acc, cur) => {
-//   let movieName = acc.find(movie => movie.title === cur.title)
-//   // if the titles do not match and total is less than remaining credit, add the movie to the filteredMovies
-//   if (!movieName) {
-//     return acc.concat([cur]);
-//     // if they do match, do not add the movie to filteredMovies and alert that the movie is already owned
-//   } else {
-//     // console.error("You have already purchased this movie");
-//     console.log('Removed dup')
-//     return acc;
-//   }
-// }, [])
-
+const onlySearch = () =>{
+  newSearch();
+  hideGenreOptions();
+  clearMyMovies();
+  clearLists();
+  noShowBal();
+  showPurchaseButton();
+  hidePurchaseButton()
+}
+btnSearchMovie.addEventListener("click", onlySearch)
 
 // when submitted, movie is pushed in to purchased movies
 // when purchased movies is filtered, if statement is comparing to pruchased movies, so alert pops up everytime there is a duplicate in purchased movies --- need to fix
