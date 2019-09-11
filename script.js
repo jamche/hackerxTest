@@ -1,8 +1,6 @@
 // 4 Options the user can select
 //1. Show all movies from json file that the user can select from available_movies, sorted alphabetically and by genre showing title/rating/cost
-
 // empty array to push list of movies inside
-// const allMovies = []
 let actionMovies = []
 let comedyMovies = []
 let documentaryMovies = []
@@ -44,6 +42,14 @@ const romanceTitle = document.querySelector("#romanceTitle");
 const scifiTitle = document.querySelector("#scifiTitle");
 const thrillerTitle = document.querySelector("#thrillerTitle");
 
+// search form variables
+const searchForm = document.getElementById("searchForm");
+const searchFormSub = document.getElementById("searchFormSub")
+const btnSearchMovie = document.getElementById("searchForMovie");
+const searchList = document.querySelector(".searchList")
+let searchedMovies = [];
+let strSearch = ""
+
 // remove any articles from the titles from words
 const removeArticles = (str) => {
   words = str.split(" ");
@@ -75,6 +81,7 @@ const clearMovieList = () =>{
 const clearMyMovies = () =>{
   userList.style.display = "none";
 }
+
 
 // toggles to show buttons when show all movies is clicked and show user movies
 const toggleButton = () =>{
@@ -165,6 +172,7 @@ const clearPage = () => {
 const showBalance = () => {
   creditBalance.innerHTML = `<p>Your Current Credit Balance: 
     ${userCreditBalance - total}</p>`;
+    purchaseForm.style.display= 'none';
 }
 
 // Purchase Button functions
@@ -174,7 +182,6 @@ const hidePurchaseButton = () => {
 const showPurchaseButton = () => {
   btnPurchaseOption.style.display = "block";
 }
-
 const showPurchaseOption = () => {
   purchaseForm.style.display = "block";
 }
@@ -183,6 +190,9 @@ const hidePurchaseOption = () => {
 }
 
 // Show Genre options buttons
+const showByGenre= () => {
+  btnShowByGenre.style.display = 'block';
+}
 const showGenreOptions = () => {
   showGenre.style.display = "flex"
 }
@@ -192,6 +202,31 @@ const hideGenreOptions = () => {
 }
 const initialMovies = () => {
   movieList.style.display = "initial"
+}
+
+// Search option button
+const newSearch = () => {
+  searchedMovies = []
+  searchList.innerHTML = "";
+  strSearch = ""
+  searchForm.style.display = "initial";
+  movieList.style.display = "none";
+}
+const hideSearch = () => {
+  searchForm.style.display = "none"
+}
+const hideSearchList = () =>{
+  searchList.innerHTML = "";
+  strSearch = "";
+  searchedMovies= [];
+}
+const showAll = () =>{
+  showAllMoviesButton();
+  showUsersMoviesButton();
+  showBal();
+  showPurchaseButton();
+  showByGenre();
+  purchaseForm.style.display = "block";
 }
 
 // gets action movies
@@ -380,41 +415,52 @@ const getThriller = () => {
 }
 //show all movies by calling each genre function ot populate movies with data
 const btnAll = document.getElementById("allMovies");
-// gets all movies
-btnAll.addEventListener("click", getAction);
-btnAll.addEventListener("click", getComedy);
-btnAll.addEventListener("click", getDrama);
-btnAll.addEventListener("click", getDocumentary);
-btnAll.addEventListener("click", getHorror);
-btnAll.addEventListener("click", getRomance);
-btnAll.addEventListener("click", getScifi);
-btnAll.addEventListener("click", getThriller);
-// hides show all movies when clicked and show my users movies
-btnAll.addEventListener("click", toggleButton);
-// clears page of any movies purchased
-btnAll.addEventListener("click", clearMyMovies);
-// displays the movie list when clicked again
-btnAll.addEventListener("click", populateMovies);
-// hides balance
-btnAll.addEventListener("click", noShowBal);
-// hides the input option to purchase a movie
-btnAll.addEventListener("click", hidePurchaseOption);
-// shows the purchased button if it was hidden previuosly
-btnAll.addEventListener("click", showPurchaseButton);
-// hides all the options to select by genre by default
-btnAll.addEventListener("click", hideGenreOptions);
 
+const getAllMovies = () =>{
+  getAction();
+  getComedy();
+  getDocumentary();
+  getHorror();
+  getRomance();
+  getScifi();
+  getThriller();
+  toggleButton();
+  clearMyMovies();
+  populateMovies();
+  noShowBal();
+  hidePurchaseOption();
+  showPurchaseButton();
+  hideGenreOptions();
+  hideSearch();
+  hideSearchList();
+  // resets the margin to 2% if other options were clicked
+  getActionList.style.margin = "2%";
+  getComedyList.style.margin = "2%";
+  getDocumentaryList.style.margin = "2%";
+  getDramaList.style.margin = "2%";
+  getHorrorList.style.margin = "2%";
+  getRomanceList.style.margin = "2%";
+  getScifiList.style.margin = "2%";
+  getThrillerList.style.margin = "2%";
+}
+// // gets all movies
+btnAll.addEventListener("click", getAllMovies);
 // show users movies
 const btnUser = document.getElementById("usersMovies");
-btnUser.addEventListener("click", getUserMovies);
-btnUser.addEventListener("click", toggleButtonUser);
-btnUser.addEventListener("click", clearMovieList);
-btnUser.addEventListener("click", populateUserMovies);
-btnUser.addEventListener("click", noShowBal);
-btnUser.addEventListener("click", hidePurchaseOption);
-btnUser.addEventListener("click", showPurchaseButton);
-btnUser.addEventListener("click", hideGenreOptions);
 
+const onlyUser = () =>{
+  getUserMovies();
+  toggleButtonUser();
+  clearMovieList();
+  populateUserMovies();
+  noShowBal();
+  hidePurchaseOption();
+  showPurchaseButton();
+  hideGenreOptions();
+  hideSearch();
+  hideSearchList();
+}
+btnUser.addEventListener("click", onlyUser);
 
 //3. User is shown their credit balance and returned to the selection menu. Initial is 100 credits
 // user credit balance 
@@ -422,16 +468,21 @@ btnUser.addEventListener("click", hideGenreOptions);
 let userCreditBalance = 10;
 const btnShowCreditBal = document.getElementById("userCreditBalance");
 const creditBalance = document.querySelector(".creditBalance")
-btnShowCreditBal.addEventListener("click", showBalance);
-// btnShowCreditBal.addEventListener("click", clearPage);
-btnShowCreditBal.addEventListener("click", showBal);
-btnShowCreditBal.addEventListener("click", clearMovieList);
-btnShowCreditBal.addEventListener("click", clearMyMovies);
-btnShowCreditBal.addEventListener("click", hidePurchaseOption);
-btnShowCreditBal.addEventListener("click", showAllMoviesButton);
-btnShowCreditBal.addEventListener("click", showUsersMoviesButton)
-btnShowCreditBal.addEventListener("click", showPurchaseButton);
-btnShowCreditBal.addEventListener("click", hideGenreOptions);
+
+const onlyBal = () =>{
+  showBalance();
+  showBal();
+  clearMovieList();
+  clearMyMovies();
+  hidePurchaseOption();
+  showAllMoviesButton();
+  showUsersMoviesButton();
+  showPurchaseButton();
+  hideGenreOptions();
+  hideSearch();
+  hideSearchList();
+}
+btnShowCreditBal.addEventListener("click", onlyBal);
 
 //4. 
 // User can purchase a movie by typing the name of the movie. If movie is owned alredy, the string "You have already purchased this movie" should display and user is returned to select.
@@ -445,14 +496,19 @@ const purchaseText = document.getElementById("purchaseFormText");
 const noCreditText =document.getElementById("noCredit")
 purchaseForm.style.display = "none";
 
-btnPurchaseOption.addEventListener("click", showPurchaseOption);
-btnPurchaseOption.addEventListener("click", noShowBal);
-btnPurchaseOption.addEventListener("click", showAllMoviesButton);
-btnPurchaseOption.addEventListener("click", showUsersMoviesButton)
-btnPurchaseOption.addEventListener("click", clearMovieList);
-btnPurchaseOption.addEventListener("click", clearMyMovies);
-btnPurchaseOption.addEventListener("click", hidePurchaseButton);
-btnPurchaseOption.addEventListener("click", hideGenreOptions);
+const onlyPurchase = () =>{
+  showPurchaseOption();
+  showAllMoviesButton();
+  showUsersMoviesButton();
+  noShowBal();
+  hidePurchaseButton();
+  clearMovieList();
+  clearMyMovies();
+  hideGenreOptions();
+  hideSearch();
+}
+
+btnPurchaseOption.addEventListener("click", onlyPurchase);
 
 const form = document.getElementById("form");
 // adds all movies that the user has typed in
@@ -470,13 +526,15 @@ form.addEventListener("submit",(e) =>{
       // gets array of each genre
       let moviesOne = movies[key]
       for(let i = 0; i< moviesOne.length; i++){
-        // gets objects(movies) of each genre
+        // iterates through each movie of each genre
         // matches input of the user to title of the movie
           if (movieInput === moviesOne[i].title.toUpperCase() ) {
             // pushes the input of the user to the purchased movies array if typed in correctly
-            console.log(total);
             if(total + 1 > 11 || total + 2 > 11 || total + 3 > 11){
               noCreditText.innerHTML = "Not enough credit remaining to purchase this movie."
+              setTimeout(() => {
+                  noCreditText.innerHTML=""
+              }, 3000);
               return false;
             } 
             else{
@@ -493,7 +551,7 @@ form.addEventListener("submit",(e) =>{
                   filteredMovies.pop();
                   purchaseText.innerHTML = "Not enough credit remaining to purchase this movie."
                   setTimeout(() => {
-                    noCreditText.innerHTML = "";
+                    purchaseText.innerHTML = "";
                   }, 3000);
                   return acc;
                 }else{ 
@@ -506,15 +564,17 @@ form.addEventListener("submit",(e) =>{
               let movieName = acc.find(movie => movie.title === cur.title)
                 // if the titles do not match and total is less than remaining credit, add the movie to the filteredMovies
                 if (!movieName && total < 11) {
-                  return acc.concat([cur]);                
+                  return acc.concat([cur]);    
                   // if they do match, do not add the movie to filteredMovies and alert that the movie is already owned
                 } else{
                   total = total - cur.cost;
                   // console.error("You have already purchased this movie");
-                  purchaseText.innerHTML = "You have already purchase this movie."
+                  purchaseText.innerHTML = "You have already purchased this movie. Returning to main menu..."
                   setTimeout(() => {
+                    showAll();
                     purchaseText.innerHTML = "";
-                  }, 3000);
+                    purchaseForm.style.display = "none";
+                  }, 2000);
                   return acc;
                 }
               }, [])
@@ -552,6 +612,14 @@ const clearLists = () => {
   strRom = "";
   strSci = "";
   strThr = "";
+  btnGetAction.style.display = "flex";
+  btnGetComedy.style.display = "flex";
+  btnGetDocumentary.style.display = "flex";
+  btnGetDrama.style.display = "flex";
+  btnGetHorror.style.display = "flex";
+  btnGetRomance.style.display = "flex";
+  btnGetScifi.style.display = "flex";
+  btnGetThriller.style.display = "flex";
   actionTitle.innerHTML = '';
   comedyTitle.innerHTML = '';
   documentaryTitle.innerHTML = '';
@@ -573,6 +641,14 @@ const getOnlyAction = () => {
   getRomanceList.innerHTML = "";
   getScifiList.innerHTML = "";
   getThrillerList.innerHTML = "";
+  getActionList.style.margin = "2%"
+  getComedyList.style.margin = 0;
+  getDocumentaryList.style.margin = 0;
+  getDramaList.style.margin = 0;
+  getHorrorList.style.margin = 0;
+  getRomanceList.style.margin = 0;
+  getScifiList.style.margin = 0;
+  getThrillerList.style.margin = 0;
   strCom = "";
   strDoc = "";
   strDra = "";
@@ -610,6 +686,16 @@ const getOnlyComedy = () => {
   getRomanceList.innerHTML = "";
   getScifiList.innerHTML = "";
   getThrillerList.innerHTML = "";
+  // removes margin, ensures all lists are in same position
+  getActionList.style.margin = 0
+  getComedyList.style.margin = "2%";
+  getDocumentaryList.style.margin = 0;
+  getDramaList.style.margin = 0;
+  getHorrorList.style.margin = 0;
+  getRomanceList.style.margin = 0;
+  getScifiList.style.margin = 0;
+  getThrillerList.style.margin = 0;
+  // 
   strAct = "";
   strDoc = "";
   strDra = "";
@@ -647,6 +733,16 @@ const getOnlyDocumentary = () => {
   getRomanceList.innerHTML = "";
   getScifiList.innerHTML = "";
   getThrillerList.innerHTML = "";
+  // removes margin, ensures all lists are in same position
+  getActionList.style.margin = 0
+  getComedyList.style.margin = 0;
+  getDocumentaryList.style.margin = "2%";
+  getDramaList.style.margin = 0;
+  getHorrorList.style.margin = 0;
+  getRomanceList.style.margin = 0;
+  getScifiList.style.margin = 0;
+  getThrillerList.style.margin = 0;
+  // empties list when clicked for each genre, repopulates it based on which genre is selected
   strAct = "";
   strCom = "";
   strDra = "";
@@ -684,6 +780,16 @@ const getOnlyDrama = () => {
   getRomanceList.innerHTML = "";
   getScifiList.innerHTML = "";
   getThrillerList.innerHTML = "";
+  // removes margin, ensures all lists are in same position
+  getActionList.style.margin = 0
+  getComedyList.style.margin = 0;
+  getDocumentaryList.style.margin = 0;
+  getDramaList.style.margin = "2%";
+  getHorrorList.style.margin = 0;
+  getRomanceList.style.margin = 0;
+  getScifiList.style.margin = 0;
+  getThrillerList.style.margin = 0;
+  // empties list when clicked for each genre, repopulates it based on which genre is selected
   strAct = "";
   strCom = "";
   strDoc = "";
@@ -721,6 +827,16 @@ const getOnlyHorror = () => {
   getRomanceList.innerHTML = "";
   getScifiList.innerHTML = "";
   getThrillerList.innerHTML = "";
+  // removes margin, ensures all lists are in same position
+  getActionList.style.margin = 0
+  getComedyList.style.margin = 0;
+  getDocumentaryList.style.margin = 0;
+  getDramaList.style.margin = 0;
+  getHorrorList.style.margin = "2%";
+  getRomanceList.style.margin = 0;
+  getScifiList.style.margin = 0;
+  getThrillerList.style.margin = 0;
+  // empties list when clicked for each genre, repopulates it based on which genre is selected
   strAct = "";
   strCom = "";
   strDra = "";
@@ -757,6 +873,16 @@ const getOnlyRomance = () => {
   getRomanceList.innerHTML = "flex";
   getScifiList.innerHTML = "";
   getThrillerList.innerHTML = "";
+  // removes margin, ensures all lists are in same position
+  getActionList.style.margin = 0
+  getComedyList.style.margin = 0;
+  getDocumentaryList.style.margin = 0;
+  getDramaList.style.margin = 0;
+  getHorrorList.style.margin = 0;
+  getRomanceList.style.margin = "2%";
+  getScifiList.style.margin = 0;
+  getThrillerList.style.margin = 0;
+  // empties list when clicked for each genre, repopulates it based on which genre is selected
   strAct = "";
   strCom = "";
   strDoc = "";
@@ -794,6 +920,16 @@ const getOnlyScifi = () => {
   getRomanceList.innerHTML = "";
   getScifiList.innerHTML = "flex";
   getThrillerList.innerHTML = "";
+  // removes margin, ensures all lists are in same position
+  getActionList.style.margin = 0
+  getComedyList.style.margin = 0;
+  getDocumentaryList.style.margin = 0;
+  getDramaList.style.margin = 0;
+  getHorrorList.style.margin = 0;
+  getRomanceList.style.margin = 0;
+  getScifiList.style.margin = "2%";
+  getThrillerList.style.margin = 0;
+  // empties list when clicked for each genre, repopulates it based on which genre is selected
   strAct = "";
   strCom = "";
   strDoc = "";
@@ -830,6 +966,16 @@ const getOnlyThriller = () => {
   getRomanceList.innerHTML = "";
   getScifiList.innerHTML = "";
   getThrillerList.innerHTML = "flex";
+  // removes margin, ensures all lists are in same position
+  getActionList.style.margin = 0
+  getComedyList.style.margin = 0;
+  getDocumentaryList.style.margin = 0;
+  getDramaList.style.margin = 0;
+  getHorrorList.style.margin = 0;
+  getRomanceList.style.margin = 0;
+  getScifiList.style.margin = 0;
+  getThrillerList.style.margin = "2%";
+  // empties list when clicked for each genre, repopulates it based on which genre is selected
   strAct = "";
   strCom = "";
   strDoc = "";
@@ -868,15 +1014,21 @@ const getRomanceList = document.querySelector(".romanceList")
 const getScifiList = document.querySelector(".scifiList")
 const getThrillerList = document.querySelector(".thrillerList")
 
-btnShowByGenre = document.getElementById("showByGenre");
+const onlyGenre = () => {
+  showGenreOptions();
+  showAllMoviesButton();
+  showUsersMoviesButton();
+  noShowBal();
+  showPurchaseButton();
+  hidePurchaseOption();
+  clearMyMovies();
+  clearLists();
+  hideSearch();
+  hideSearchList();
+}
 
-btnShowByGenre.addEventListener("click", showGenreOptions);
-btnShowByGenre.addEventListener("click", noShowBal);
-btnShowByGenre.addEventListener("click", showAllMoviesButton);
-btnShowByGenre.addEventListener("click", showUsersMoviesButton)
-btnShowByGenre.addEventListener("click", hidePurchaseOption);
-btnShowByGenre.addEventListener("click", clearMyMovies);
-btnShowByGenre.addEventListener("click", clearLists);
+btnShowByGenre = document.getElementById("showByGenre");
+btnShowByGenre.addEventListener("click", onlyGenre)
 
 btnGetAction = document.getElementById("getActionButton")
 btnGetAction.addEventListener("click", getOnlyAction);
@@ -902,11 +1054,53 @@ btnGetScifi.addEventListener("click", getOnlyScifi);
 btnGetThriller = document.getElementById("getThrillerButton")
 btnGetThriller.addEventListener("click", getOnlyThriller);
 
-
-// search form
-
-// const searchForm = document.getElementById
-
+searchForm.style.display = 'none';
+// search form submit
+searchForm.addEventListener("submit",(e) =>{
+  e.preventDefault();
+  const searchMovieInput = document.getElementById('searchMovie').value.toUpperCase();
+  slicedInput = searchMovieInput.slice(0,3)
+  getData()
+  .then(movies =>{
+    for(let key in movies){
+      let moviesOne = movies[key]
+       comparedMovie = moviesOne.filter( movie => {
+        // slices first three characters to match
+        let searchedMovie = movie.title.slice(0,3).toUpperCase();
+        // returns movie  if slicedInput matches newWord
+        return searchedMovie === slicedInput
+      })
+      searchedMovies.push(comparedMovie);
+    }
+    for(let i =0; i < searchedMovies.length;i++){
+        let searched = searchedMovies[i];
+        for(let j = 0; j < searched.length;j++){
+          console.log(searched[j])
+          strSearch += `
+            <ul class=${"movies"}>
+              <li> Title: ${searched[j].title}</li> 
+              <li> Rating: ${searched[j].rating}</li>
+              <li> Cost: ${searched[j].cost}</li> 
+            </ul>  
+            `
+        }
+        searchList.innerHTML = strSearch;
+      }
+  })
+  searchFormSub.reset();
+  searchForm.style.display = "none";
+  movieList.style.display = "none";
+})
+const onlySearch = () =>{
+  newSearch();
+  hideGenreOptions();
+  clearMyMovies();
+  clearLists();
+  noShowBal();
+  showPurchaseButton();
+  hidePurchaseButton()
+}
+btnSearchMovie.addEventListener("click", onlySearch)
 
 // when submitted, movie is pushed in to purchased movies
 // when purchased movies is filtered, if statement is comparing to pruchased movies, so alert pops up everytime there is a duplicate in purchased movies --- need to fix

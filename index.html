@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Hackerx Code Challenge</title>
+  <title>Chisel AI Code Challenge</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
@@ -12,7 +12,7 @@
 <body>
 <header>
   <div class="wrapper">
-    <h1>Movie list</h1>
+    <h1>The Great Movie List</h1>
   </div>
 </header>
 <main>
@@ -24,7 +24,8 @@
       <button id="userCreditBalance">My Credit Balance</button>
       <button id="purchase">Purchase Movies</button>
       <!-- extra -->
-      <button id="showByGenre">Show Movies by Genre</button>
+      <button id="showByGenre">Search by Genre</button>
+      <button id="searchForMovie">Search for a Movie</button>
     </div>
     <div id = "purchaseForm">
       <form action="" id= "form">
@@ -36,18 +37,18 @@
       </form>
     </div>
 
-    <!-- <div id="searchForm">
-      <form action="" id = "searchForm">
-        <label for="searchMovie"></label>
-        <input type="text" id="movieSearch">
-        <input type="submit" id ="searchFormSubmit" >
+    <div id="searchForm">
+      <form action="" id = "searchFormSub">
+        <label for="searchMovie">Search Movie</label>
+        <input type="text" id="searchMovie" placeholder="Enter text..." />
+        <input type="submit" id ="searchFormSubmit" />
       </form>
-    </div> -->
+    </div>
 
     <div class="showGenre">
       <button id = "getActionButton">Action</button>
       <button id = "getComedyButton">Comedy</button>
-      <button id = "getDocumentaryButton"  >Documentary</button>
+      <button id = "getDocumentaryButton" >Documentary</button>
       <button id = "getDramaButton">Drama</button>
       <button id = "getHorrorButton">Horror</button>
       <button id = "getRomanceButton">Romance</button>
@@ -100,6 +101,9 @@
     <div class="userMovieList">
       <h2>My Movies</h2>
       <div class="userList"></div>
+    </div>
+    <div class="searchList">
+      
     </div>
     <div class="creditBalance"></div>
   </div>
