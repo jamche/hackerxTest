@@ -30,6 +30,8 @@ ul{
 h1{
   text-align: center;
   font-family: 'Roboto', sans-serif;
+  font-size: 3rem;
+  color:#FFF5EE;
 }
 h2{
   font-family: 'Roboto', sans-serif;
@@ -58,29 +60,33 @@ h2{
 .menuOptions{
   margin: 1% 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   width: 100%;
   flex-wrap: wrap;
 }
 .menuOptions button,
 .showGenre button{
-  padding: 1% 2%;
+  padding: 10px 10px;
   margin: 1% 0;
 }
-#purchaseForm{
+#purchaseForm,
+#searchForm{
   text-align: center;
   width: 100%;
   margin: 2% 0;
 }
-#purchaseForm p{
+#purchaseForm p,
+#serachFormText{
   margin:2% 0;
 }
-#form label{
+#form label,
+#searchFormSub label{
   color: #fff5ee;
   background: #AE030E;
   padding: 10px;
 }
-#formSubmit{
+#formSubmit,
+#searchFormSubmit{
   border: none;
   padding: 10px;
   color: #FFF5EE;
@@ -88,7 +94,8 @@ h2{
   background: #AE030E;
   margin-left: -4px;
 } 
-#movieInput{
+#movieInput,
+#searchMovie{
   background: #FFF5EE;
   border: none;
   margin-left: 10px;
@@ -106,7 +113,8 @@ h2{
 .horrorList,
 .romanceList,
 .scifiList,
-.thrillerList{
+.thrillerList,
+.searchList{
     display: flex;
     flex-wrap:wrap;
     margin: 2% 0;
