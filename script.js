@@ -426,6 +426,7 @@ const getAllMovies = () =>{
   hideGenreOptions();
   hideSearch();
   hideSearchList();
+  // resets the margin to 2% if other options were clicked
   getActionList.style.margin = "2%";
   getComedyList.style.margin = "2%";
   getDocumentaryList.style.margin = "2%";
@@ -436,8 +437,7 @@ const getAllMovies = () =>{
   getThrillerList.style.margin = "2%";
 }
 // // gets all movies
-btnAll.addEventListener("click", getAllMovies)
-
+btnAll.addEventListener("click", getAllMovies);
 // show users movies
 const btnUser = document.getElementById("usersMovies");
 
@@ -554,7 +554,7 @@ form.addEventListener("submit",(e) =>{
               filteredMovies = filteredMovies.reduce((acc, cur) => {
               let movieName = acc.find(movie => movie.title === cur.title)
                 // if the titles do not match and total is less than remaining credit, add the movie to the filteredMovies
-                if (!movieName && total < 10) {
+                if (!movieName && total < 11) {
                   return acc.concat([cur]);    
                   // if they do match, do not add the movie to filteredMovies and alert that the movie is already owned
                 } else{
