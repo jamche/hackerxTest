@@ -532,6 +532,9 @@ form.addEventListener("submit",(e) =>{
             // pushes the input of the user to the purchased movies array if typed in correctly
             if(total + 1 > 11 || total + 2 > 11 || total + 3 > 11){
               noCreditText.innerHTML = "Not enough credit remaining to purchase this movie."
+              setTimeout(() => {
+                  noCreditText.innerHTML=""
+              }, 3000);
               return false;
             } 
             else{
@@ -548,7 +551,7 @@ form.addEventListener("submit",(e) =>{
                   filteredMovies.pop();
                   purchaseText.innerHTML = "Not enough credit remaining to purchase this movie."
                   setTimeout(() => {
-                    noCreditText.innerHTML = "";
+                    purchaseText.innerHTML = "";
                   }, 3000);
                   return acc;
                 }else{ 
@@ -1016,6 +1019,7 @@ const onlyGenre = () => {
   showAllMoviesButton();
   showUsersMoviesButton();
   noShowBal();
+  showPurchaseButton();
   hidePurchaseOption();
   clearMyMovies();
   clearLists();
