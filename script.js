@@ -224,6 +224,7 @@ const hideSearchList = () =>{
   strSearch = "";
   searchedMovies= [];
 }
+// show all buttons
 const showAll = () =>{
   showAllMoviesButton();
   showUsersMoviesButton();
@@ -438,7 +439,7 @@ const getAllMovies = () =>{
   getThriller();
   toggleButton();
   clearMyMovies();
-  populateMovies();
+  // populateMovies();
   showPurchaseButton();
   hideAll();
   // resets the margin to 2% if other options were clicked
@@ -623,6 +624,7 @@ const clearLists = () => {
   scifiTitle.innerHTML = '';
   thrillerTitle.innerHTML = '';
 }
+
 // for genres, only action list will show and reset margins to 0 for other lists to stay in the same place when user clicks another genre
 const getOnlyAction = () => {
   getAction();
@@ -1017,11 +1019,13 @@ const onlyGenre = () => {
   showUsersMoviesButton();
   showPurchaseButton();
   clearPage();
+  clearLists();
   hideBal();
   hidePurchaseOption();
   hideSearch();
   hideSearchList();
 }
+
 // will display the list based on genre clicked
 btnShowByGenre = document.getElementById("showByGenre");
 btnShowByGenre.addEventListener("click", onlyGenre)
