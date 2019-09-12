@@ -87,7 +87,10 @@ Evaluation of your submission will be based on the following criteria.
 -------------------------------------
 ## Notes:
 
-Application runs in the browser, open the link hosted on github pages.
+Application runs in the browser, open the link hosted on github pages(below).
+
+https://jamche.github.io/hackerxTest/
+
 6 choices(4 main choices + 2 optional) to choose from based on the given instructions.
 App is responsive on mobile.
 
