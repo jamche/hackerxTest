@@ -83,7 +83,9 @@ Evaluation of your submission will be based on the following criteria.
 3. How well the concerns of the application are separated.
 4. Are the appropriate data types used for the solution
 
-Documentation / Notes:
+
+-------------------------------------
+## Documentation / Notes:
 
 Application runs in the browser, open the link hosted on github pages.
 6 choices(4 main choices + 2 optional) to choose from based on the given instructions.
