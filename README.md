@@ -83,3 +83,15 @@ Evaluation of your submission will be based on the following criteria.
 3. How well the concerns of the application are separated.
 4. Are the appropriate data types used for the solution
 
+Documentation / Notes:
+
+Application runs in the browser, open the link hosted on github pages.
+6 choices(4 main choices + 2 optional) to choose from based on the given instructions.
+App is responsive on mobile.
+
+Application runs based on instructions however instead of using my_movies.json, an array is used to push purchased movies that the user chooses.
+
+I was not comfortable using node.js as I am currently not proficient, however by adding to an array, the user can select as many movies that their credit balance allows and have those movies saved in "Show My Movies" option without the lsit being deleted(unless the page is refreshed).
+
+The "Search for a Movie" option will dissapear the form if no results are found when typing in a value.
+The user must hit the "Search for a Movie" button to search again.
