@@ -1102,6 +1102,8 @@ searchForm.addEventListener("submit",(e) =>{
   movieList.style.display = "none";
 })
 const onlySearch = () =>{
+  showAllMoviesButton();
+  showUsersMoviesButton();
   newSearch();
   clearMyMovies();
   clearLists();
