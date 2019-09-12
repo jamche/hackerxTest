@@ -60,13 +60,13 @@ h2{
 .menuOptions{
   margin: 1% 0;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   width: 100%;
   flex-wrap: wrap;
 }
 .menuOptions button,
 .showGenre button{
-  padding: 10px 10px;
+  padding: 10px 20px;
   margin: 1% 0;
 }
 #purchaseForm,
@@ -138,4 +138,38 @@ h2{
   justify-content: space-between;
   flex-wrap: wrap;
   width:100%;
+}
+@media screen and (max-width:580px) {
+  .menuOptions{
+      flex-direction:column;
+  }
+  .showGenre{
+    flex-direction: column;
+  }
+  .movies{
+    width: 100%;
+    margin:2% 0;
+  }
+  .showGenre{
+    margin:10% 0;
+  }
+
+  #form,
+  #searchFormSub{
+    display: flex;
+    flex-direction: column;
+  }
+  #form label,
+  #searchFormSub label{
+    width: 100%;
+  }
+  #movieInput,
+  #searchMovie{
+    margin-left: 0;
+  }
+  #formSubmit,
+  #searchFormSubmit{
+    margin: 5% 0;
+  }
+    
 }

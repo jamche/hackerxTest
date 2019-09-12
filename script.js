@@ -155,7 +155,7 @@ const getUserMovies = () => {
 
 // Credit Balance functions
 // doesn't show balance on other options
-const noShowBal = () => {
+const hideBal = () => {
   creditBalance.style.display = "none";
 }
 const showBal = () => {
@@ -227,6 +227,14 @@ const showAll = () =>{
   showPurchaseButton();
   showByGenre();
   purchaseForm.style.display = "block";
+}
+
+const hideAll = () =>{
+  hideBal();
+  hidePurchaseOption();
+  hideGenreOptions();
+  hideSearch();
+  hideSearchList();
 }
 
 // gets action movies
@@ -427,12 +435,8 @@ const getAllMovies = () =>{
   toggleButton();
   clearMyMovies();
   populateMovies();
-  noShowBal();
-  hidePurchaseOption();
   showPurchaseButton();
-  hideGenreOptions();
-  hideSearch();
-  hideSearchList();
+  hideAll();
   // resets the margin to 2% if other options were clicked
   getActionList.style.margin = "2%";
   getComedyList.style.margin = "2%";
@@ -453,32 +457,27 @@ const onlyUser = () =>{
   toggleButtonUser();
   clearMovieList();
   populateUserMovies();
-  noShowBal();
-  hidePurchaseOption();
   showPurchaseButton();
-  hideGenreOptions();
-  hideSearch();
-  hideSearchList();
+  hideAll();
 }
 btnUser.addEventListener("click", onlyUser);
 
 //3. User is shown their credit balance and returned to the selection menu. Initial is 100 credits
 // user credit balance 
 // should be 100, 10 for test
-let userCreditBalance = 10;
+let userCreditBalance = 100;
 const btnShowCreditBal = document.getElementById("userCreditBalance");
 const creditBalance = document.querySelector(".creditBalance")
 
 const onlyBal = () =>{
   showBalance();
   showBal();
-  clearMovieList();
-  clearMyMovies();
-  hidePurchaseOption();
   showAllMoviesButton();
   showUsersMoviesButton();
   showPurchaseButton();
+  clearPage();
   hideGenreOptions();
+  hidePurchaseOption();
   hideSearch();
   hideSearchList();
 }
@@ -500,10 +499,9 @@ const onlyPurchase = () =>{
   showPurchaseOption();
   showAllMoviesButton();
   showUsersMoviesButton();
-  noShowBal();
+  clearPage();
+  hideBal();
   hidePurchaseButton();
-  clearMovieList();
-  clearMyMovies();
   hideGenreOptions();
   hideSearch();
 }
@@ -530,7 +528,7 @@ form.addEventListener("submit",(e) =>{
         // matches input of the user to title of the movie
           if (movieInput === moviesOne[i].title.toUpperCase() ) {
             // pushes the input of the user to the purchased movies array if typed in correctly
-            if(total + 1 > 11 || total + 2 > 11 || total + 3 > 11){
+            if(total + 1 > 101 || total + 2 > 101 || total + 3 > 101){
               noCreditText.innerHTML = "Not enough credit remaining to purchase this movie."
               setTimeout(() => {
                   noCreditText.innerHTML=""
@@ -546,7 +544,7 @@ form.addEventListener("submit",(e) =>{
                 console.log(cur.cost)
                 let accumCost = acc + cur.cost
                 // if accumCost is greater than credit remaining, substract movie cost and remove last added movie from user's movies
-                if(accumCost > 10){
+                if(accumCost > 100){
                   total = total - cur.cost
                   filteredMovies.pop();
                   purchaseText.innerHTML = "Not enough credit remaining to purchase this movie."
@@ -563,7 +561,7 @@ form.addEventListener("submit",(e) =>{
               filteredMovies = filteredMovies.reduce((acc, cur) => {
               let movieName = acc.find(movie => movie.title === cur.title)
                 // if the titles do not match and total is less than remaining credit, add the movie to the filteredMovies
-                if (!movieName && total < 11) {
+                if (!movieName && total < 101) {
                   return acc.concat([cur]);    
                   // if they do match, do not add the movie to filteredMovies and alert that the movie is already owned
                 } else{
@@ -612,14 +610,14 @@ const clearLists = () => {
   strRom = "";
   strSci = "";
   strThr = "";
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
+  btnGetAction.style.display = "block";
+  btnGetComedy.style.display = "block";
+  btnGetDocumentary.style.display = "block";
+  btnGetDrama.style.display = "block";
+  btnGetHorror.style.display = "block";
+  btnGetRomance.style.display = "block";
+  btnGetScifi.style.display = "block";
+  btnGetThriller.style.display = "block";
   actionTitle.innerHTML = '';
   comedyTitle.innerHTML = '';
   documentaryTitle.innerHTML = '';
@@ -667,13 +665,13 @@ const getOnlyAction = () => {
   thrillerTitle.innerHTML = '';
   // shows all genre option buttons other than action since it was clicked and showing, same for all functions below
   btnGetAction.style.display = "none";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
+  btnGetComedy.style.display = "block";
+  btnGetDocumentary.style.display = "block";
+  btnGetDrama.style.display = "block";
+  btnGetHorror.style.display = "block";
+  btnGetRomance.style.display = "block";
+  btnGetScifi.style.display = "block";
+  btnGetThriller.style.display = "block";
 }
 const getOnlyComedy = () => {
   getComedy();
@@ -713,14 +711,14 @@ const getOnlyComedy = () => {
   scifiTitle.innerHTML = '';
   thrillerTitle.innerHTML = '';
   // 
-  btnGetAction.style.display = "flex";
+  btnGetAction.style.display = "block";
   btnGetComedy.style.display = "none";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
+  btnGetDocumentary.style.display = "block";
+  btnGetDrama.style.display = "block";
+  btnGetHorror.style.display = "block";
+  btnGetRomance.style.display = "block";
+  btnGetScifi.style.display = "block";
+  btnGetThriller.style.display = "block";
 }
 const getOnlyDocumentary = () => {
   getDocumentary();
@@ -760,14 +758,14 @@ const getOnlyDocumentary = () => {
   scifiTitle.innerHTML = '';
   thrillerTitle.innerHTML = '';
   //
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
+  btnGetAction.style.display = "block";
+  btnGetComedy.style.display = "block";
   btnGetDocumentary.style.display = "none";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
+  btnGetDrama.style.display = "block";
+  btnGetHorror.style.display = "block";
+  btnGetRomance.style.display = "block";
+  btnGetScifi.style.display = "block";
+  btnGetThriller.style.display = "block";
 }
 const getOnlyDrama = () => {
   getDrama();
@@ -807,14 +805,14 @@ const getOnlyDrama = () => {
   scifiTitle.innerHTML = '';
   thrillerTitle.innerHTML = '';
   //
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
+  btnGetAction.style.display = "block";
+  btnGetComedy.style.display = "block";
+  btnGetDocumentary.style.display = "block";
   btnGetDrama.style.display = "none";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
+  btnGetHorror.style.display = "block";
+  btnGetRomance.style.display = "block";
+  btnGetScifi.style.display = "block";
+  btnGetThriller.style.display = "block";
 }
 const getOnlyHorror = () => {
   getHorror();
@@ -853,14 +851,14 @@ const getOnlyHorror = () => {
   scifiTitle.innerHTML = '';
   thrillerTitle.innerHTML = '';
   //
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
+  btnGetAction.style.display = "block";
+  btnGetComedy.style.display = "block";
+  btnGetDocumentary.style.display = "block";
+  btnGetDrama.style.display = "block";
   btnGetHorror.style.display = "none";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
+  btnGetRomance.style.display = "block";
+  btnGetScifi.style.display = "block";
+  btnGetThriller.style.display = "block";
 }
 const getOnlyRomance = () => {
   getRomance();
@@ -900,14 +898,14 @@ const getOnlyRomance = () => {
   scifiTitle.innerHTML = '';
   thrillerTitle.innerHTML = '';
   //
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
+  btnGetAction.style.display = "block";
+  btnGetComedy.style.display = "block";
+  btnGetDocumentary.style.display = "block";
+  btnGetDrama.style.display = "block";
+  btnGetHorror.style.display = "block";
   btnGetRomance.style.display = "none";
-  btnGetScifi.style.display = "flex";
-  btnGetThriller.style.display = "flex";
+  btnGetScifi.style.display = "block";
+  btnGetThriller.style.display = "block";
 }
 const getOnlyScifi = () => {
   getScifi();
@@ -946,14 +944,14 @@ const getOnlyScifi = () => {
   scifiTitle.innerHTML = 'Scifi Movies';
   thrillerTitle.innerHTML = '';
   //
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
+  btnGetAction.style.display = "block";
+  btnGetComedy.style.display = "block";
+  btnGetDocumentary.style.display = "block";
+  btnGetDrama.style.display = "block";
+  btnGetHorror.style.display = "block";
+  btnGetRomance.style.display = "block";
   btnGetScifi.style.display = "none";
-  btnGetThriller.style.display = "flex";
+  btnGetThriller.style.display = "block";
 }
 const getOnlyThriller = () => {
   getThriller();
@@ -992,13 +990,13 @@ const getOnlyThriller = () => {
   scifiTitle.innerHTML = '';
   thrillerTitle.innerHTML = 'Thriller Movies';
   //
-  btnGetAction.style.display = "flex";
-  btnGetComedy.style.display = "flex";
-  btnGetDocumentary.style.display = "flex";
-  btnGetDrama.style.display = "flex";
-  btnGetHorror.style.display = "flex";
-  btnGetRomance.style.display = "flex";
-  btnGetScifi.style.display = "flex";
+  btnGetAction.style.display = "block";
+  btnGetComedy.style.display = "block";
+  btnGetDocumentary.style.display = "block";
+  btnGetDrama.style.display = "block";
+  btnGetHorror.style.display = "block";
+  btnGetRomance.style.display = "block";
+  btnGetScifi.style.display = "block";
   btnGetThriller.style.display = "none";
 }
 
@@ -1018,11 +1016,10 @@ const onlyGenre = () => {
   showGenreOptions();
   showAllMoviesButton();
   showUsersMoviesButton();
-  noShowBal();
   showPurchaseButton();
+  clearPage();
+  hideBal();
   hidePurchaseOption();
-  clearMyMovies();
-  clearLists();
   hideSearch();
   hideSearchList();
 }
@@ -1093,12 +1090,12 @@ searchForm.addEventListener("submit",(e) =>{
 })
 const onlySearch = () =>{
   newSearch();
-  hideGenreOptions();
   clearMyMovies();
   clearLists();
-  noShowBal();
-  showPurchaseButton();
-  hidePurchaseButton()
+  showPurchaseButton()
+  hideGenreOptions();
+  hideBal();
+  hidePurchaseOption();
 }
 btnSearchMovie.addEventListener("click", onlySearch)
 
