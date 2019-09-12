@@ -135,7 +135,6 @@ const getUserMovies = () => {
   filteredMovies.forEach(movie => {
     // random boolean for if watched or not
     let random = Math.random() >= 0.5;
-    // console.log(random);
     if (random > 0.5) {
       movie.watched = 'Watched'
     } else {
@@ -540,8 +539,6 @@ form.addEventListener("submit",(e) =>{
               filteredMovies.push(moviesOne[i])
               // track cost of movies bought
               total = filteredMovies.reduce((acc, cur) => {
-                console.log(acc)
-                console.log(cur.cost)
                 let accumCost = acc + cur.cost
                 // if accumCost is greater than credit remaining, substract movie cost and remove last added movie from user's movies
                 if(accumCost > 100){
@@ -586,7 +583,7 @@ form.addEventListener("submit",(e) =>{
       purchaseText.innerHTML = ""
     }, 1000);
   })
-  .catch(err => console.log(err))
+  .catch(err => (err))
   form.reset();
 })
 // extra here to show by genre
@@ -1052,6 +1049,8 @@ btnGetThriller = document.getElementById("getThrillerButton")
 btnGetThriller.addEventListener("click", getOnlyThriller);
 
 searchForm.style.display = 'none';
+
+
 // search form submit
 searchForm.addEventListener("submit",(e) =>{
   e.preventDefault();
@@ -1061,28 +1060,36 @@ searchForm.addEventListener("submit",(e) =>{
   .then(movies =>{
     for(let key in movies){
       let moviesOne = movies[key]
-       comparedMovie = moviesOne.filter( movie => {
+       movieComparison = moviesOne.filter( movie => {
         // slices first three characters to match
-        let searchedMovie = movie.title.slice(0,3).toUpperCase();
-        // returns movie  if slicedInput matches newWord
-        return searchedMovie === slicedInput
+        let comparedMovie = movie.title.slice(0,3).toUpperCase();
+        // returns movie  if slicedInput matches comparedMovie
+        return comparedMovie === slicedInput
       })
-      searchedMovies.push(comparedMovie);
+      searchedMovies.push(movieComparison);
     }
-    for(let i =0; i < searchedMovies.length;i++){
-        let searched = searchedMovies[i];
-        for(let j = 0; j < searched.length;j++){
-          console.log(searched[j])
-          strSearch += `
-            <ul class=${"movies"}>
-              <li> Title: ${searched[j].title}</li> 
-              <li> Rating: ${searched[j].rating}</li>
-              <li> Cost: ${searched[j].cost}</li> 
-            </ul>  
-            `
-        }
+    let count = 0;
+    searchedMovies.forEach(array => {
+      if (array.length === 0) {
+        count++;
+      }
+      if (count === 8){
+        strSearch = `<p>No movies found matching ${searchMovieInput}</p>`
         searchList.innerHTML = strSearch;
       }
+    })
+    searchedMovies.forEach(movieArray => {
+      movieArray.forEach(movie => {
+        strSearch += `
+            <ul class=${"movies"}>
+              <li> Title: ${movie.title}</li> 
+              <li> Rating: ${movie.rating}</li>
+              <li> Cost: ${movie.cost}</li> 
+            </ul>  
+            `
+      });
+    });
+    searchList.innerHTML = strSearch;      
   })
   searchFormSub.reset();
   searchForm.style.display = "none";
@@ -1098,8 +1105,5 @@ const onlySearch = () =>{
   hidePurchaseOption();
 }
 btnSearchMovie.addEventListener("click", onlySearch)
-
-// when submitted, movie is pushed in to purchased movies
-// when purchased movies is filtered, if statement is comparing to pruchased movies, so alert pops up everytime there is a duplicate in purchased movies --- need to fix
 
 

@@ -93,5 +93,5 @@ Application runs based on instructions however instead of using my_movies.json, 
 
 I was not comfortable using node.js as I am currently not proficient, however by adding to an array, the user can select as many movies that their credit balance allows and have those movies saved in "Show My Movies" option without the lsit being deleted(unless the page is refreshed).
 
-The "Search for a Movie" option will dissapear the form if no results are found when typing in a value.
-The user must hit the "Search for a Movie" button to search again.
+The "Search for a Movie" option will indicate if no match is found with the input of the user.
+If a match is found, the user will be shown their matches.
