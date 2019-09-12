@@ -100,7 +100,7 @@ I am not proficient using node.js, however by adding to an array, the user can s
 3. "My Credit Balance" will show the user's credit and will be deducted based on which movie is purchased
 4. "Purchase Movies" will allow the user to purchase any movie if typed in correctly and will be added to My Movies list.
 
-##Extra
+## Extra:
 
 5. "Search By Genre" will allow the user to search individually by genre, depending which is selected. User can still select from the menu on how to proceeed.
 6. "Search for a Movie" will allow the user to search for a movie with at least 3 characters, and results will be displayed based on what is typed. If no results, user is informed that no results found.
