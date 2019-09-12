@@ -439,7 +439,7 @@ const getAllMovies = () =>{
   getThriller();
   toggleButton();
   clearMyMovies();
-  // populateMovies();
+  populateMovies();
   showPurchaseButton();
   hideAll();
   // resets the margin to 2% if other options were clicked
